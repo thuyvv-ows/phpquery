@@ -1,0 +1,31 @@
+{
+    "name": "thuyvv/phpquery",
+    "description": "phpQuery is a server-side, chainable, CSS3 selector driven Document Object Model (DOM) API based on jQuery JavaScript Library",
+    "version": "1.0.0",
+    "keywords": [],
+    "homepage": "https://code.google.com/p/phpquery/",
+    "authors": [
+         {
+             "name": "ThuyVu",
+             "email": "thuyvv.hn@gmail.com",
+             "homepage": "https://github.com/thuy-vv",
+             "role": "Developer"
+        }
+    ],
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^5.6|^7.0|^8.0"
+    },
+    "autoload": {
+        "classmap": [],
+        "files": [],
+        "psr-4": {}
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
