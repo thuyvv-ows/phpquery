@@ -32,25 +32,25 @@ class DOMEvent {
 	/**
 	 * Returns a boolean indicating whether the event bubbles up through the DOM or not.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $bubbles = true;
 	/**
 	 * Returns a boolean indicating whether the event is cancelable.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $cancelable = true;
 	/**
 	 * Returns a reference to the currently registered target for the event.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $currentTarget;
 	/**
 	 * Returns detail about the event, depending on the type of event.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 * @link http://developer.mozilla.org/en/DOM/event.detail
 	 */
 	public $detail;	// ???
@@ -59,7 +59,7 @@ class DOMEvent {
 	 *
 	 * NOT IMPLEMENTED
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 * @link http://developer.mozilla.org/en/DOM/event.eventPhase
 	 */
 	public $eventPhase;	// ???
@@ -68,7 +68,7 @@ class DOMEvent {
 	 *
 	 * NOT IMPLEMENTED
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $explicitOriginalTarget; // moz only
 	/**
@@ -76,25 +76,25 @@ class DOMEvent {
 	 *
 	 * NOT IMPLEMENTED
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $originalTarget;	// moz only
 	/**
 	 * Identifies a secondary target for the event.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $relatedTarget;
 	/**
 	 * Returns a reference to the target to which the event was originally dispatched.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $target;
 	/**
 	 * Returns the time that the event was created.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $timeStamp;
 	/**
@@ -145,7 +145,7 @@ class DOMDocumentWrapper {
 	public $id;
 	/**
 	 * @todo Rewrite as method and quess if null.
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $contentType = '';
 	public $xpath;
@@ -157,7 +157,7 @@ class DOMDocumentWrapper {
 	public $eventsGlobal = array();
 	/**
 	 * @TODO iframes support http://code.google.com/p/phpquery/issues/detail?id=28
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public $frames = array();
 	/**
@@ -783,7 +783,7 @@ class DOMDocumentWrapper {
 	 *
 	 * @param $tag
 	 * @param $xml
-	 * @return unknown_type
+	 * @return mixed
 	 * @author mjaque at ilkebenson dot com
 	 * @link http://php.net/manual/en/domdocument.savehtml.php#81256
 	 */
@@ -816,8 +816,8 @@ abstract class phpQueryEvents {
 	 * Trigger a type of event on every matched element.
 	 *
 	 * @param DOMNode|phpQueryObject|string $document
-	 * @param unknown_type $type
-	 * @param unknown_type $data
+	 * @param mixed $type
+	 * @param mixed $data
 	 *
 	 * @TODO exclusive events (with !)
 	 * @TODO global events (test)
@@ -895,9 +895,9 @@ abstract class phpQueryEvents {
 	 * Can also bind custom events.
 	 *
 	 * @param DOMNode|phpQueryObject|string $document
-	 * @param unknown_type $type
-	 * @param unknown_type $data Optional
-	 * @param unknown_type $callback
+	 * @param mixed $type
+	 * @param mixed $data Optional
+	 * @param mixed $callback
 	 *
 	 * @TODO support '!' (exclusive) events
 	 * @TODO support more than event in $type (space-separated)
@@ -924,8 +924,8 @@ abstract class phpQueryEvents {
 	 * Enter description here...
 	 *
 	 * @param DOMNode|phpQueryObject|string $document
-	 * @param unknown_type $type
-	 * @param unknown_type $callback
+	 * @param mixed $type
+	 * @param mixed $callback
 	 *
 	 * @TODO namespace events
 	 * @TODO support more than event in $type (space-separated)
@@ -1223,7 +1223,7 @@ class phpQueryObject
 	 *
 	 * @access private
 	 * @param $attr
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public function __get($attr) {
 		switch($attr) {
@@ -1289,7 +1289,7 @@ class phpQueryObject
 	 *     ->find('div')->...
 	 * </code>
 	 *
-	 * @param unknown_type $domId
+	 * @param mixed $domId
 	 * @see phpQuery::newDocument
 	 * @see phpQuery::newDocumentFile
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
@@ -1693,8 +1693,8 @@ class phpQueryObject
 	 *
 	 * In the future, when PHP will support XLS 2.0, then we would do that this way:
 	 * contains(tokenize(@class, '\s'), "something")
-	 * @param unknown_type $class
-	 * @param unknown_type $node
+	 * @param mixed $class
+	 * @param mixed $node
 	 * @return boolean
 	 * @access private
 	 */
@@ -2420,7 +2420,7 @@ class phpQueryObject
 	/**
 	 *
 	 * @param $value
-	 * @return unknown_type
+	 * @return mixed
 	 * @TODO implement in all methods using passed parameters
 	 */
 	protected static function unQuote($value) {
@@ -2464,7 +2464,7 @@ class phpQueryObject
 	/**
 	 * @access private
 	 * @param $html
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public function __loadSuccess($html) {
 		if ($this->_loadSelector) {
@@ -2505,8 +2505,8 @@ class phpQueryObject
 	/**
 	 * Trigger a type of event on every matched element.
 	 *
-	 * @param unknown_type $type
-	 * @param unknown_type $data
+	 * @param mixed $type
+	 * @param mixed $data
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @TODO support more than event in $type (space-separated)
 	 */
@@ -2518,8 +2518,8 @@ class phpQueryObject
 	/**
 	 * This particular method triggers all bound event handlers on an element (for a specific event type) WITHOUT executing the browsers default actions.
 	 *
-	 * @param unknown_type $type
-	 * @param unknown_type $data
+	 * @param mixed $type
+	 * @param mixed $data
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @TODO
 	 */
@@ -2530,9 +2530,9 @@ class phpQueryObject
 	 * Binds a handler to one or more events (like click) for each matched element.
 	 * Can also bind custom events.
 	 *
-	 * @param unknown_type $type
-	 * @param unknown_type $data Optional
-	 * @param unknown_type $callback
+	 * @param mixed $type
+	 * @param mixed $data Optional
+	 * @param mixed $callback
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @TODO support '!' (exclusive) events
 	 * @TODO support more than event in $type (space-separated)
@@ -2550,8 +2550,8 @@ class phpQueryObject
 	/**
 	 * Enter description here...
 	 *
-	 * @param unknown_type $type
-	 * @param unknown_type $callback
+	 * @param mixed $type
+	 * @param mixed $callback
 	 * @return unknown
 	 * @TODO namespace events
 	 * @TODO support more than event in $type (space-separated)
@@ -2627,7 +2627,7 @@ class phpQueryObject
   /**
    *
 	 * @param $node
-	 * @return unknown_type
+	 * @return mixed
 	 * @access private
    */
 	public function ___wrapAllCallback($node) {
@@ -2891,7 +2891,7 @@ class phpQueryObject
 	 * jQuey difference
 	 *
 	 * @param $markup
-	 * @return unknown_type
+	 * @return mixed
 	 * @TODO trigger change event for textarea
 	 */
 	public function markup($markup = null, $callback1 = null, $callback2 = null, $callback3 = null) {
@@ -2905,7 +2905,7 @@ class phpQueryObject
 	 * jQuey difference
 	 *
 	 * @param $markup
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public function markupOuter($callback1 = null, $callback2 = null, $callback3 = null) {
 		$args = func_get_args();
@@ -2917,7 +2917,7 @@ class phpQueryObject
 	/**
 	 * Enter description here...
 	 *
-	 * @param unknown_type $html
+	 * @param mixed $html
 	 * @return string|phpQuery|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @TODO force html result
 	 */
@@ -2996,7 +2996,7 @@ class phpQueryObject
 	 * Enter description here...
 	 * 
 	 * @param $code
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public function markupPHP($code = null) {
 		return isset($code)
@@ -3007,7 +3007,7 @@ class phpQueryObject
 	 * Enter description here...
 	 * 
 	 * @param $code
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public function markupOuterPHP() {
 		return phpQuery::markupToPHP($this->markupOuter());
@@ -3144,8 +3144,8 @@ class phpQueryObject
 	/**
 	 * Internal insert method. Don't use it.
 	 *
-	 * @param unknown_type $target
-	 * @param unknown_type $type
+	 * @param mixed $target
+	 * @param mixed $type
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @access private
 	 */
@@ -3328,8 +3328,8 @@ class phpQueryObject
 	/**
 	 * Enter description here...
 	 *
-	 * @param unknown_type $start
-	 * @param unknown_type $end
+	 * @param mixed $start
+	 * @param mixed $end
 	 *
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 * @testme
@@ -3395,7 +3395,7 @@ class phpQueryObject
 	 * @deprecated
 	 * @param $class
 	 * @param $file
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public static function extend($class, $file = null) {
 		return $this->plugin($class, $file);
@@ -3405,7 +3405,7 @@ class phpQueryObject
 	 * @access private
 	 * @param $method
 	 * @param $args
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public function __call($method, $args) {
 		$aliasMethods = array('clone', 'empty');
@@ -4152,7 +4152,7 @@ class phpQueryObject
 	/**
 	 * Returns node's XPath.
 	 *
-	 * @param unknown_type $oneNode
+	 * @param mixed $oneNode
 	 * @return string
 	 * @TODO use native getNodePath is avaible
 	 * @access private
@@ -4404,7 +4404,7 @@ abstract class phpQuery {
 	/**
 	 * Applies only to HTML.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public static $defaultDoctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">';
@@ -4418,7 +4418,7 @@ abstract class phpQuery {
 	/**
 	 * List of loaded plugins.
 	 *
-	 * @var unknown_type
+	 * @var mixed
 	 */
 	public static $pluginsLoaded = array();
 	public static $pluginsMethods = array();
@@ -4595,7 +4595,7 @@ abstract class phpQuery {
 	 * to using this method.
 	 * $id can be retrived via getDocumentID() or getDocumentIDRef().
 	 *
-	 * @param unknown_type $id
+	 * @param mixed $id
 	 */
 	public static function selectDocument($id) {
 		$id = self::getDocumentID($id);
@@ -4608,7 +4608,7 @@ abstract class phpQuery {
 	 * Chainable.
 	 *
 	 * @see phpQuery::selectDocument()
-	 * @param unknown_type $id
+	 * @param mixed $id
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function getDocument($id = null) {
@@ -4622,7 +4622,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocument($markup = null, $contentType = null) {
@@ -4635,7 +4635,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentHTML($markup = null, $charset = null) {
@@ -4648,7 +4648,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentXML($markup = null, $charset = null) {
@@ -4661,7 +4661,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentXHTML($markup = null, $charset = null) {
@@ -4674,7 +4674,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentPHP($markup = null, $contentType = "text/html") {
@@ -4772,7 +4772,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentFileHTML($file, $charset = null) {
@@ -4785,7 +4785,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentFileXML($file, $charset = null) {
@@ -4798,7 +4798,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentFileXHTML($file, $charset = null) {
@@ -4811,7 +4811,7 @@ abstract class phpQuery {
 	 * Creates new document from markup.
 	 * Chainable.
 	 *
-	 * @param unknown_type $markup
+	 * @param mixed $markup
 	 * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
 	 */
 	public static function newDocumentFilePHP($file, $contentType = null) {
@@ -4832,8 +4832,8 @@ abstract class phpQuery {
 	/**
 	 * Enter description here...
 	 *
-	 * @param unknown_type $html
-	 * @param unknown_type $domId
+	 * @param mixed $html
+	 * @param mixed $domId
 	 * @return unknown New DOM ID
 	 * @todo support PHP tags in input
 	 * @todo support passing DOMDocument object from self::loadDocument
@@ -4869,7 +4869,7 @@ abstract class phpQuery {
 	 * @param string|array $target
 	 * @param array $source
 	 * @TODO support string $source
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public static function extend($target, $source) {
 		switch($target) {
@@ -5353,7 +5353,7 @@ abstract class phpQuery {
 
 	/**
 	 *
-	 * @return unknown_type
+	 * @return mixed
 	 * @link http://docs.jquery.com/Utilities/jQuery.makeArray
 	 */
 	public static function makeArray($obj) {
@@ -5377,7 +5377,7 @@ abstract class phpQuery {
 	 *
 	 * @param $object
 	 * @param $callback
-	 * @return unknown_type
+	 * @return mixed
 	 * @link http://docs.jquery.com/Utilities/jQuery.each
 	 */
 	public static function each($object, $callback, $param1 = null, $param2 = null, $param3 = null) {
@@ -5428,7 +5428,7 @@ abstract class phpQuery {
 	 * @param $callback Callback
 	 * @param $params
 	 * @param $paramStructure
-	 * @return unknown_type
+	 * @return mixed
 	 */
 	public static function callbackRun($callback, $params = array(), $paramStructure = null) {
 		if (! $callback)
@@ -5481,7 +5481,7 @@ abstract class phpQuery {
 	 * @param $array
 	 * @param $callback
 	 * @param $invert
-	 * @return unknown_type
+	 * @return mixed
 	 * @link http://docs.jquery.com/Utilities/jQuery.grep
 	 */
 	public static function grep($array, $callback, $invert = false) {
@@ -5499,7 +5499,7 @@ abstract class phpQuery {
 	/**
 	 *
 	 * @param $function
-	 * @return unknown_type
+	 * @return mixed
 	 * @TODO there are problems with non-static methods, second parameter pass it
 	 * 	but doesnt verify is method is really callable
 	 */
