@@ -351,789 +351,1155 @@ class CallbackParameterToReference extends Callback
  */
 class CallbackParam { }
 
+// -- DOM class list ----------------------------------------
+
 /**
- * DOMEvent class.
- *
+ * Class DOMEvent
  * Based on
- * @link http://developer.mozilla.org/En/DOM:event
- * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
+ *
+ * @link    http://developer.mozilla.org/En/DOM:event
+ * @author  Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @package phpQuery
- * @todo implement ArrayAccess ?
+ * @TODO    implement ArrayAccess ?
  */
-class DOMEvent {
-	/**
-	 * Returns a boolean indicating whether the event bubbles up through the DOM or not.
-	 *
-	 * @var mixed
-	 */
-	public $bubbles = true;
-	/**
-	 * Returns a boolean indicating whether the event is cancelable.
-	 *
-	 * @var mixed
-	 */
-	public $cancelable = true;
-	/**
-	 * Returns a reference to the currently registered target for the event.
-	 *
-	 * @var mixed
-	 */
-	public $currentTarget;
-	/**
-	 * Returns detail about the event, depending on the type of event.
-	 *
-	 * @var mixed
-	 * @link http://developer.mozilla.org/en/DOM/event.detail
-	 */
-	public $detail;	// ???
-	/**
-	 * Used to indicate which phase of the event flow is currently being evaluated.
-	 *
-	 * NOT IMPLEMENTED
-	 *
-	 * @var mixed
-	 * @link http://developer.mozilla.org/en/DOM/event.eventPhase
-	 */
-	public $eventPhase;	// ???
-	/**
-	 * The explicit original target of the event (Mozilla-specific).
-	 *
-	 * NOT IMPLEMENTED
-	 *
-	 * @var mixed
-	 */
-	public $explicitOriginalTarget; // moz only
-	/**
-	 * The original target of the event, before any retargetings (Mozilla-specific).
-	 *
-	 * NOT IMPLEMENTED
-	 *
-	 * @var mixed
-	 */
-	public $originalTarget;	// moz only
-	/**
-	 * Identifies a secondary target for the event.
-	 *
-	 * @var mixed
-	 */
-	public $relatedTarget;
-	/**
-	 * Returns a reference to the target to which the event was originally dispatched.
-	 *
-	 * @var mixed
-	 */
-	public $target;
-	/**
-	 * Returns the time that the event was created.
-	 *
-	 * @var mixed
-	 */
-	public $timeStamp;
-	/**
-	 * Returns the name of the event (case-insensitive).
-	 */
-	public $type;
-	public $runDefault = true;
-	public $data = null;
-	public function __construct($data) {
-		foreach($data as $k => $v) {
-			$this->$k = $v;
-		}
-		if (! $this->timeStamp)
-			$this->timeStamp = time();
-	}
-	/**
-	 * Cancels the event (if it is cancelable).
-	 *
-	 */
-	public function preventDefault() {
-		$this->runDefault = false;
-	}
-	/**
-	 * Stops the propagation of events further along in the DOM.
-	 *
-	 */
-	public function stopPropagation() {
-		$this->bubbles = false;
-	}
+class DOMEvent
+{
+    /**
+     * Returns a boolean indicating whether the event bubbles up through the DOM or not.
+     *
+     * @var bool
+     */
+    public $bubbles = true;
+    /**
+     * Returns a boolean indicating whether the event is cancelable.
+     *
+     * @var bool
+     */
+    public $cancelable = true;
+    /**
+     * Returns a reference to the currently registered target for the event.
+     *
+     * @var DOMNode
+     */
+    public $currentTarget;
+    /**
+     * Returns detail about the event, depending on the type of event.
+     *
+     * @var mixed
+     * @link http://developer.mozilla.org/en/DOM/event.detail
+     */
+    public $detail;    // ???
+    /**
+     * Used to indicate which phase of the event flow is currently being evaluated.
+     * NOT IMPLEMENTED
+     *
+     * @var mixed
+     * @link http://developer.mozilla.org/en/DOM/event.eventPhase
+     */
+    public $eventPhase;    // ???
+    /**
+     * The explicit original target of the event (Mozilla-specific).
+     * NOT IMPLEMENTED
+     *
+     * @var DOMNode
+     */
+    public $explicitOriginalTarget; // moz only
+    /**
+     * The original target of the event, before any retargeting (Mozilla-specific).
+     * NOT IMPLEMENTED
+     *
+     * @var DOMNode
+     */
+    public $originalTarget;    // moz only
+    /**
+     * Identifies a secondary target for the event.
+     *
+     * @var DOMNode
+     */
+    public $relatedTarget;
+    /**
+     * Returns a reference to the target to which the event was originally dispatched.
+     *
+     * @var DOMNode
+     */
+    public $target;
+    /**
+     * Returns the time that the event was created.
+     *
+     * @var int
+     */
+    public $timeStamp;
+    /**
+     * Returns the name of the event (case-insensitive).
+     *
+     * @var string
+     */
+    public $type;
+    /**
+     * @var bool
+     */
+    public $runDefault = true;
+    /**
+     * @var null|mixed
+     */
+    public $data = null;
+
+    /**
+     * DOMEvent Constructor
+     *
+     * @param array $data
+     */
+    public function __construct($data)
+    {
+        foreach ($data as $k => $v) {
+            $this->$k = $v;
+        }
+        if (!$this->timeStamp) {
+            $this->timeStamp = time();
+        }
+    }
+
+    /**
+     * Cancels the event (if it is cancelable).
+     *
+     * @return void
+     */
+    public function preventDefault()
+    {
+        $this->runDefault = false;
+    }
+
+    /**
+     * Stops the propagation of events further along in the DOM.
+     *
+     * @return void
+     */
+    public function stopPropagation()
+    {
+        $this->bubbles = false;
+    }
 }
 
-
 /**
- * DOMDocumentWrapper class simplifies work with DOMDocument.
- *
+ * Class DOMDocumentWrapper
+ * class simplifies work with DOMDocument.
  * Know bug:
  * - in XHTML fragments, <br /> changes to <br clear="none" />
  *
- * @todo check XML catalogs compatibility
- * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
+ * @author  Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @package phpQuery
+ * @TODO    check XML catalogs compatibility
  */
-class DOMDocumentWrapper {
-	/**
-	 * @var DOMDocument
-	 */
-	public $document;
-	public $id;
-	/**
-	 * @todo Rewrite as method and quess if null.
-	 * @var mixed
-	 */
-	public $contentType = '';
-	public $xpath;
-	public $uuid = 0;
-	public $data = array();
-	public $dataNodes = array();
-	public $events = array();
-	public $eventsNodes = array();
-	public $eventsGlobal = array();
-	/**
-	 * @TODO iframes support http://code.google.com/p/phpquery/issues/detail?id=28
-	 * @var mixed
-	 */
-	public $frames = array();
-	/**
-	 * Document root, by default equals to document itself.
-	 * Used by documentFragments.
-	 *
-	 * @var DOMNode
-	 */
-	public $root;
-	public $isDocumentFragment;
-	public $isXML = false;
-	public $isXHTML = false;
-	public $isHTML = false;
-	public $charset;
-	public function __construct($markup = null, $contentType = null, $newDocumentID = null) {
-		if (isset($markup))
-			$this->load($markup, $contentType, $newDocumentID);
-		$this->id = $newDocumentID
-			? $newDocumentID
-			: md5(microtime());
-	}
-	public function load($markup, $contentType = null, $newDocumentID = null) {
-//		phpQuery::$documents[$id] = $this;
-		$this->contentType = strtolower($contentType);
-		if ($markup instanceof DOMDOCUMENT) {
-			$this->document = $markup;
-			$this->root = $this->document;
-			$this->charset = $this->document->encoding;
-			// TODO isDocumentFragment
-		} else {
-			$loaded = $this->loadMarkup($markup);
-		}
-		if ($loaded) {
-//			$this->document->formatOutput = true;
-			$this->document->preserveWhiteSpace = true;
-			$this->xpath = new DOMXPath($this->document);
-			$this->afterMarkupLoad();
-			return true;
-			// remember last loaded document
-//			return phpQuery::selectDocument($id);
-		}
-		return false;
-	}
-	protected function afterMarkupLoad() {
-		if ($this->isXHTML) {
-			$this->xpath->registerNamespace("html", "http://www.w3.org/1999/xhtml");
-		}
-	}
-	protected function loadMarkup($markup) {
-		$loaded = false;
-		if ($this->contentType) {
-			self::debug("Load markup for content type {$this->contentType}");
-			// content determined by contentType
-			list($contentType, $charset) = $this->contentTypeToArray($this->contentType);
-			switch($contentType) {
-				case 'text/html':
-					phpQuery::debug("Loading HTML, content type '{$this->contentType}'");
-					$loaded = $this->loadMarkupHTML($markup, $charset);
-				break;
-				case 'text/xml':
-				case 'application/xhtml+xml':
-					phpQuery::debug("Loading XML, content type '{$this->contentType}'");
-					$loaded = $this->loadMarkupXML($markup, $charset);
-				break;
-				default:
-					// for feeds or anything that sometimes doesn't use text/xml
-					if (strpos('xml', $this->contentType) !== false) {
-						phpQuery::debug("Loading XML, content type '{$this->contentType}'");
-						$loaded = $this->loadMarkupXML($markup, $charset);
-					} else
-						phpQuery::debug("Could not determine document type from content type '{$this->contentType}'");
-			}
-		} else {
-			// content type autodetection
-			if ($this->isXML($markup)) {
-				phpQuery::debug("Loading XML, isXML() == true");
-				$loaded = $this->loadMarkupXML($markup);
-				if (! $loaded && $this->isXHTML) {
-					phpQuery::debug('Loading as XML failed, trying to load as HTML, isXHTML == true');
-					$loaded = $this->loadMarkupHTML($markup);
-				}
-			} else {
-				phpQuery::debug("Loading HTML, isXML() == false");
-				$loaded = $this->loadMarkupHTML($markup);
-			}
-		}
-		return $loaded;
-	}
-	protected function loadMarkupReset() {
-		$this->isXML = $this->isXHTML = $this->isHTML = false;
-	}
-	protected function documentCreate($charset, $version = '1.0') {
-		if (! $version)
-			$version = '1.0';
-		$this->document = new DOMDocument($version, $charset);
-		$this->charset = $this->document->encoding;
-//		$this->document->encoding = $charset;
-		$this->document->formatOutput = true;
-		$this->document->preserveWhiteSpace = true;
-	}
-	protected function loadMarkupHTML($markup, $requestedCharset = null) {
-		if (phpQuery::$debug)
-			phpQuery::debug('Full markup load (HTML): '.substr($markup, 0, 250));
-		$this->loadMarkupReset();
-		$this->isHTML = true;
-		if (!isset($this->isDocumentFragment))
-			$this->isDocumentFragment = self::isDocumentFragmentHTML($markup);
-		$charset = null;
-		$documentCharset = $this->charsetFromHTML($markup);
-		$addDocumentCharset = false;
-		if ($documentCharset) {
-			$charset = $documentCharset;
-			$markup = $this->charsetFixHTML($markup);
-		} else if ($requestedCharset) {
-			$charset = $requestedCharset;
-		}
-		if (! $charset)
-			$charset = phpQuery::$defaultCharset;
-		// HTTP 1.1 says that the default charset is ISO-8859-1
-		// @see http://www.w3.org/International/O-HTTP-charset
-		if (! $documentCharset) {
-			$documentCharset = 'ISO-8859-1';
-			$addDocumentCharset = true;	
-		}
-		// Should be careful here, still need 'magic encoding detection' since lots of pages have other 'default encoding'
-		// Worse, some pages can have mixed encodings... we'll try not to worry about that
-		$requestedCharset = strtoupper($requestedCharset);
-		$documentCharset = strtoupper($documentCharset);
-		phpQuery::debug("DOC: $documentCharset REQ: $requestedCharset");
-		if ($requestedCharset && $documentCharset && $requestedCharset !== $documentCharset) {
-			phpQuery::debug("CHARSET CONVERT");
-			// Document Encoding Conversion
-			// http://code.google.com/p/phpquery/issues/detail?id=86
-			if (function_exists('mb_detect_encoding')) {
-				$possibleCharsets = array($documentCharset, $requestedCharset, 'AUTO');
-				$docEncoding = mb_detect_encoding($markup, implode(', ', $possibleCharsets));
-				if (! $docEncoding)
-					$docEncoding = $documentCharset; // ok trust the document
-				phpQuery::debug("DETECTED '$docEncoding'");
-				// Detected does not match what document says...
-				if ($docEncoding !== $documentCharset) {
-					// Tricky..
-				}
-				if ($docEncoding !== $requestedCharset) {
-					phpQuery::debug("CONVERT $docEncoding => $requestedCharset");
-					$markup = mb_convert_encoding($markup, $requestedCharset, $docEncoding);
-					$markup = $this->charsetAppendToHTML($markup, $requestedCharset);
-					$charset = $requestedCharset;
-				}
-			} else {
-				phpQuery::debug("TODO: charset conversion without mbstring...");
-			}
-		}
-		$return = false;
-		if ($this->isDocumentFragment) {
-			phpQuery::debug("Full markup load (HTML), DocumentFragment detected, using charset '$charset'");
-			$return = $this->documentFragmentLoadMarkup($this, $charset, $markup);
-		} else {
-			if ($addDocumentCharset) {
-				phpQuery::debug("Full markup load (HTML), appending charset: '$charset'");
-				$markup = $this->charsetAppendToHTML($markup, $charset);
-			}
-			phpQuery::debug("Full markup load (HTML), documentCreate('$charset')");
-			$this->documentCreate($charset);
-			$return = phpQuery::$debug === 2
-				? $this->document->loadHTML($markup)
-				: @$this->document->loadHTML($markup);
-			if ($return)
-				$this->root = $this->document;
-		}
-		if ($return && ! $this->contentType)
-			$this->contentType = 'text/html';
-		return $return;
-	}
-	protected function loadMarkupXML($markup, $requestedCharset = null) {
-		if (phpQuery::$debug)
-			phpQuery::debug('Full markup load (XML): '.substr($markup, 0, 250));
-		$this->loadMarkupReset();
-		$this->isXML = true;
-		// check agains XHTML in contentType or markup
-		$isContentTypeXHTML = $this->isXHTML();
-		$isMarkupXHTML = $this->isXHTML($markup);
-		if ($isContentTypeXHTML || $isMarkupXHTML) {
-			self::debug('Full markup load (XML), XHTML detected');
-			$this->isXHTML = true;
-		}
-		// determine document fragment
-		if (! isset($this->isDocumentFragment))
-			$this->isDocumentFragment = $this->isXHTML
-				? self::isDocumentFragmentXHTML($markup)
-				: self::isDocumentFragmentXML($markup);
-		// this charset will be used
-		$charset = null;
-		// charset from XML declaration @var string
-		$documentCharset = $this->charsetFromXML($markup);
-		if (! $documentCharset) {
-			if ($this->isXHTML) {
-				// this is XHTML, try to get charset from content-type meta header
-				$documentCharset = $this->charsetFromHTML($markup);
-				if ($documentCharset) {
-					phpQuery::debug("Full markup load (XML), appending XHTML charset '$documentCharset'");
-					$this->charsetAppendToXML($markup, $documentCharset);
-					$charset = $documentCharset;
-				}
-			}
-			if (! $documentCharset) {
-				// if still no document charset...
-				$charset = $requestedCharset;
-			}
-		} else if ($requestedCharset) {
-			$charset = $requestedCharset;
-		}
-		if (! $charset) {
-			$charset = phpQuery::$defaultCharset;
-		}
-		if ($requestedCharset && $documentCharset && $requestedCharset != $documentCharset) {
-			// TODO place for charset conversion
-//			$charset = $requestedCharset;
-		}
-		$return = false;
-		if ($this->isDocumentFragment) {
-			phpQuery::debug("Full markup load (XML), DocumentFragment detected, using charset '$charset'");
-			$return = $this->documentFragmentLoadMarkup($this, $charset, $markup);
-		} else {
-			// FIXME ???
-			if ($isContentTypeXHTML && ! $isMarkupXHTML)
-			if (! $documentCharset) {
-				phpQuery::debug("Full markup load (XML), appending charset '$charset'");
-				$markup = $this->charsetAppendToXML($markup, $charset);
-			}
-			// see http://pl2.php.net/manual/en/book.dom.php#78929
-			// LIBXML_DTDLOAD (>= PHP 5.1)
-			// does XML ctalogues works with LIBXML_NONET
-	//		$this->document->resolveExternals = true;
-			// TODO test LIBXML_COMPACT for performance improvement
-			// create document
-			$this->documentCreate($charset);
-			if (phpversion() < 5.1) {
-				$this->document->resolveExternals = true;
-				$return = phpQuery::$debug === 2
-					? $this->document->loadXML($markup)
-					: @$this->document->loadXML($markup);
-			} else {
-				/** @link http://pl2.php.net/manual/en/libxml.constants.php */
-				$libxmlStatic = phpQuery::$debug === 2
-					? LIBXML_DTDLOAD|LIBXML_DTDATTR|LIBXML_NONET
-					: LIBXML_DTDLOAD|LIBXML_DTDATTR|LIBXML_NONET|LIBXML_NOWARNING|LIBXML_NOERROR;
-				$return = $this->document->loadXML($markup, $libxmlStatic);
-// 				if (! $return)
-// 					$return = $this->document->loadHTML($markup);
-			}
-			if ($return)
-				$this->root = $this->document;
-		}
-		if ($return) {
-			if (! $this->contentType) {
-				if ($this->isXHTML)
-					$this->contentType = 'application/xhtml+xml';
-				else
-					$this->contentType = 'text/xml';
-			}
-			return $return;
-		} else {
-			throw new Exception("Error loading XML markup");
-		}
-	}
-	protected function isXHTML($markup = null) {
-		if (! isset($markup)) {
-			return strpos($this->contentType, 'xhtml') !== false;
-		}
-		// XXX ok ?
-		return strpos($markup, "<!DOCTYPE html") !== false;
-//		return stripos($doctype, 'xhtml') !== false;
-//		$doctype = isset($dom->doctype) && is_object($dom->doctype)
-//			? $dom->doctype->publicId
-//			: self::$defaultDoctype;
-	}
-	protected function isXML($markup) {
-//		return strpos($markup, '<?xml') !== false && stripos($markup, 'xhtml') === false;
-		return strpos(substr($markup, 0, 100), '<'.'?xml') !== false;
-	}
-	protected function contentTypeToArray($contentType) {
-		$matches = explode(';', trim(strtolower($contentType)));
-		if (isset($matches[1])) {
-			$matches[1] = explode('=', $matches[1]);
-			// strip 'charset='
-			$matches[1] = isset($matches[1][1]) && trim($matches[1][1])
-				? $matches[1][1]
-				: $matches[1][0];
-		} else
-			$matches[1] = null;
-		return $matches;
-	}
-	/**
-	 *
-	 * @param $markup
-	 * @return array contentType, charset
-	 */
-	protected function contentTypeFromHTML($markup) {
-		$matches = array();
-		// find meta tag
-		preg_match('@<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i',
-			$markup, $matches
-		);
-		if (! isset($matches[0]))
-			return array(null, null);
-		// get attr 'content'
-		preg_match('@content\\s*=\\s*(["|\'])(.+?)\\1@', $matches[0], $matches);
-		if (! isset($matches[0]))
-			return array(null, null);
-		return $this->contentTypeToArray($matches[2]);
-	}
-	protected function charsetFromHTML($markup) {
-		$contentType = $this->contentTypeFromHTML($markup);
-		return $contentType[1];
-	}
-	protected function charsetFromXML($markup) {
-		$matches;
-		// find declaration
-		preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i',
-			$markup, $matches
-		);
-		return isset($matches[2])
-			? strtolower($matches[2])
-			: null;
-	}
-	/**
-	 * Repositions meta[type=charset] at the start of head. Bypasses DOMDocument bug.
-	 *
-	 * @link http://code.google.com/p/phpquery/issues/detail?id=80
-	 * @param $html
-	 */
-	protected function charsetFixHTML($markup) {
-		$matches = array();
-		// find meta tag
-		preg_match('@\s*<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i',
-			$markup, $matches, PREG_OFFSET_CAPTURE
-		);
-		if (! isset($matches[0]))
-			return;
-		$metaContentType = $matches[0][0];
-		$markup = substr($markup, 0, $matches[0][1])
-			.substr($markup, $matches[0][1]+strlen($metaContentType));
-		$headStart = stripos($markup, '<head>');
-		$markup = substr($markup, 0, $headStart+6).$metaContentType
-			.substr($markup, $headStart+6);
-		return $markup;
-	}
-	protected function charsetAppendToHTML($html, $charset, $xhtml = false) {
-		// remove existing meta[type=content-type]
-		$html = preg_replace('@\s*<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i', '', $html);
-		$meta = '<meta http-equiv="Content-Type" content="text/html;charset='
-			.$charset.'" '
-			.($xhtml ? '/' : '')
-			.'>';
-		if (strpos($html, '<head') === false) {
-			if (strpos($hltml, '<html') === false) {
-				return $meta.$html;
-			} else {
-				return preg_replace(
-					'@<html(.*?)(?(?<!\?)>)@s',
-					"<html\\1><head>{$meta}</head>",
-					$html
-				);
-			}
-		} else {
-			return preg_replace(
-				'@<head(.*?)(?(?<!\?)>)@s',
-				'<head\\1>'.$meta,
-				$html
-			);
-		}
-	}
-	protected function charsetAppendToXML($markup, $charset) {
-		$declaration = '<'.'?xml version="1.0" encoding="'.$charset.'"?'.'>';
-		return $declaration.$markup;
-	}
-	public static function isDocumentFragmentHTML($markup) {
-		return stripos($markup, '<html') === false && stripos($markup, '<!doctype') === false;
-	}
-	public static function isDocumentFragmentXML($markup) {
-		return stripos($markup, '<'.'?xml') === false;
-	}
-	public static function isDocumentFragmentXHTML($markup) {
-		return self::isDocumentFragmentHTML($markup);
-	}
-	public function importAttr($value) {
-		// TODO
-	}
-	/**
-	 *
-	 * @param $source
-	 * @param $target
-	 * @param $sourceCharset
-	 * @return array Array of imported nodes.
-	 */
-	public function import($source, $sourceCharset = null) {
-		// TODO charset conversions
-		$return = array();
-		if ($source instanceof DOMNODE && !($source instanceof DOMNODELIST))
-			$source = array($source);
-//		if (is_array($source)) {
-//			foreach($source as $node) {
-//				if (is_string($node)) {
-//					// string markup
-//					$fake = $this->documentFragmentCreate($node, $sourceCharset);
-//					if ($fake === false)
-//						throw new Exception("Error loading documentFragment markup");
-//					else
-//						$return = array_merge($return, 
-//							$this->import($fake->root->childNodes)
-//						);
-//				} else {
-//					$return[] = $this->document->importNode($node, true);
-//				}
-//			}
-//			return $return;
-//		} else {
-//			// string markup
-//			$fake = $this->documentFragmentCreate($source, $sourceCharset);
-//			if ($fake === false)
-//				throw new Exception("Error loading documentFragment markup");
-//			else
-//				return $this->import($fake->root->childNodes);
-//		}
-		if (is_array($source) || $source instanceof DOMNODELIST) {
-			// dom nodes
-			self::debug('Importing nodes to document');
-			foreach($source as $node)
-				$return[] = $this->document->importNode($node, true);
-		} else {
-			// string markup
-			$fake = $this->documentFragmentCreate($source, $sourceCharset);
-			if ($fake === false)
-				throw new Exception("Error loading documentFragment markup");
-			else
-				return $this->import($fake->root->childNodes);
-		}
-		return $return;
-	}
-	/**
-	 * Creates new document fragment.
-	 *
-	 * @param $source
-	 * @return DOMDocumentWrapper
-	 */
-	protected function documentFragmentCreate($source, $charset = null) {
-		$fake = new DOMDocumentWrapper();
-		$fake->contentType = $this->contentType;
-		$fake->isXML = $this->isXML;
-		$fake->isHTML = $this->isHTML;
-		$fake->isXHTML = $this->isXHTML;
-		$fake->root = $fake->document;
-		if (! $charset)
-			$charset = $this->charset;
-//	$fake->documentCreate($this->charset);
-		if ($source instanceof DOMNODE && !($source instanceof DOMNODELIST))
-			$source = array($source);
-		if (is_array($source) || $source instanceof DOMNODELIST) {
-			// dom nodes
-			// load fake document
-			if (! $this->documentFragmentLoadMarkup($fake, $charset))
-				return false;
-			$nodes = $fake->import($source);
-			foreach($nodes as $node)
-				$fake->root->appendChild($node);
-		} else {
-			// string markup
-			$this->documentFragmentLoadMarkup($fake, $charset, $source);
-		}
-		return $fake;
-	}
-	/**
-	 *
-	 * @param $document DOMDocumentWrapper
-	 * @param $markup
-	 * @return $document
-	 */
-	private function documentFragmentLoadMarkup($fragment, $charset, $markup = null) {
-		// TODO error handling
-		// TODO copy doctype
-		// tempolary turn off
-		$fragment->isDocumentFragment = false;
-		if ($fragment->isXML) {
-			if ($fragment->isXHTML) {
-				// add FAKE element to set default namespace
-				$fragment->loadMarkupXML('<?xml version="1.0" encoding="'.$charset.'"?>'
-					.'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
-					.'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-					.'<fake xmlns="http://www.w3.org/1999/xhtml">'.$markup.'</fake>');
-				$fragment->root = $fragment->document->firstChild->nextSibling;
-			} else {
-				$fragment->loadMarkupXML('<?xml version="1.0" encoding="'.$charset.'"?><fake>'.$markup.'</fake>');
-				$fragment->root = $fragment->document->firstChild;
-			}
-		} else {
-			$markup2 = phpQuery::$defaultDoctype.'<html><head><meta http-equiv="Content-Type" content="text/html;charset='
-				.$charset.'"></head>';
-			$noBody = strpos($markup, '<body') === false;
-			if ($noBody)
-				$markup2 .= '<body>';
-			$markup2 .= $markup;
-			if ($noBody)
-				$markup2 .= '</body>';
-			$markup2 .= '</html>';
-			$fragment->loadMarkupHTML($markup2);
-			// TODO resolv body tag merging issue
-			$fragment->root = $noBody
-				? $fragment->document->firstChild->nextSibling->firstChild->nextSibling
-				: $fragment->document->firstChild->nextSibling->firstChild->nextSibling;
-		}
-		if (! $fragment->root)
-			return false;
-		$fragment->isDocumentFragment = true;
-		return true;
-	}
-	protected function documentFragmentToMarkup($fragment) {
-		phpQuery::debug('documentFragmentToMarkup');
-		$tmp = $fragment->isDocumentFragment;
-		$fragment->isDocumentFragment = false;
-		$markup = $fragment->markup();
-		if ($fragment->isXML) {
-			$markup = substr($markup, 0, strrpos($markup, '</fake>'));
-			if ($fragment->isXHTML) {
-				$markup = substr($markup, strpos($markup, '<fake')+43);
-			} else {
-				$markup = substr($markup, strpos($markup, '<fake>')+6);
-			}
-		} else {
-				$markup = substr($markup, strpos($markup, '<body>')+6);
-				$markup = substr($markup, 0, strrpos($markup, '</body>'));
-		}
-		$fragment->isDocumentFragment = $tmp;
-		if (phpQuery::$debug)
-			phpQuery::debug('documentFragmentToMarkup: '.substr($markup, 0, 150));
-		return $markup;
-	}
-	/**
-	 * Return document markup, starting with optional $nodes as root.
-	 *
-	 * @param $nodes	DOMNode|DOMNodeList
-	 * @return string
-	 */
-	public function markup($nodes = null, $innerMarkup = false) {
-		if (isset($nodes) && count($nodes) == 1 && $nodes[0] instanceof DOMDOCUMENT)
-			$nodes = null;
-		if (isset($nodes)) {
-			$markup = '';
-			if (!is_array($nodes) && !($nodes instanceof DOMNODELIST) )
-				$nodes = array($nodes);
-			if ($this->isDocumentFragment && ! $innerMarkup)
-				foreach($nodes as $i => $node)
-					if ($node->isSameNode($this->root)) {
-					//	var_dump($node);
-						$nodes = array_slice($nodes, 0, $i)
-							+ phpQuery::DOMNodeListToArray($node->childNodes)
-							+ array_slice($nodes, $i+1);
-						}
-			if ($this->isXML && ! $innerMarkup) {
-				self::debug("Getting outerXML with charset '{$this->charset}'");
-				// we need outerXML, so we can benefit from
-				// $node param support in saveXML()
-				foreach($nodes as $node)
-					$markup .= $this->document->saveXML($node);
-			} else {
-				$loop = array();
-				if ($innerMarkup)
-					foreach($nodes as $node) {
-						if ($node->childNodes)
-							foreach($node->childNodes as $child)
-								$loop[] = $child;
-						else
-							$loop[] = $node;
-					}
-				else
-					$loop = $nodes;
-				self::debug("Getting markup, moving selected nodes (".count($loop).") to new DocumentFragment");
-				$fake = $this->documentFragmentCreate($loop);
-				$markup = $this->documentFragmentToMarkup($fake);
-			}
-			if ($this->isXHTML) {
-				self::debug("Fixing XHTML");
-				$markup = self::markupFixXHTML($markup);
-			}
-			self::debug("Markup: ".substr($markup, 0, 250));
-			return $markup;
-		} else {
-			if ($this->isDocumentFragment) {
-				// documentFragment, html only...
-				self::debug("Getting markup, DocumentFragment detected");
-//				return $this->markup(
-////					$this->document->getElementsByTagName('body')->item(0)
-//					$this->document->root, true
-//				);
-				$markup = $this->documentFragmentToMarkup($this);
-				// no need for markupFixXHTML, as it's done thought markup($nodes) method
-				return $markup;
-			} else {
-				self::debug("Getting markup (".($this->isXML?'XML':'HTML')."), final with charset '{$this->charset}'");
-				$markup = $this->isXML
-					? $this->document->saveXML()
-					: $this->document->saveHTML();
-				if ($this->isXHTML) {
-					self::debug("Fixing XHTML");
-					$markup = self::markupFixXHTML($markup);
-				}
-				self::debug("Markup: ".substr($markup, 0, 250));
-				return $markup;
-			}
-		}
-	}
-	protected static function markupFixXHTML($markup) {
-		$markup = self::expandEmptyTag('script', $markup);
-		$markup = self::expandEmptyTag('select', $markup);
-		$markup = self::expandEmptyTag('textarea', $markup);
-		return $markup;
-	}
-	public static function debug($text) {
-		phpQuery::debug($text);
-	}
-	/**
-	 * expandEmptyTag
-	 *
-	 * @param $tag
-	 * @param $xml
-	 * @return mixed
-	 * @author mjaque at ilkebenson dot com
-	 * @link http://php.net/manual/en/domdocument.savehtml.php#81256
-	 */
-	public static function expandEmptyTag($tag, $xml){
+class DOMDocumentWrapper
+{
+    /**
+     * DOMDocument class.
+     * 
+     * @var DOMDocument
+     */
+    public $document;
+    /**
+     * @var string
+     */
+    public $id;
+    /**
+     * @var string
+     */
+    public $contentType = '';
+    /**
+     * XPath interface.
+     * 
+     * @var DOMXPath
+     */
+    public $xpath;
+    /**
+     * @var int
+     */
+    public $uuid = 0;
+    /**
+     * @var array
+     */
+    public $data = [];
+    public $dataNodes = [];
+    public $events = [];
+    public $eventsNodes = [];
+    public $eventsGlobal = [];
+    public $frames = [];
+    /**
+     * Document root, by default equals to document itself.
+     * Used by documentFragments.
+     *
+     * @var DOMNode
+     */
+    public $root;
+    /**
+     * @var bool
+     */
+    public $isDocumentFragment;
+    public $isXML = false;
+    public $isXHTML = false;
+    public $isHTML = false;
+    /**
+     * @var string
+     */
+    public $charset;
+
+    /**
+     * DOMDocumentWrapper Constructor
+     *
+     * @param null|string|DOMDocument $markup
+     * @param null|string             $contentType
+     * @param null|string             $newDocumentID
+     * @throws Exception
+     */
+    public function __construct($markup = null, $contentType = null, $newDocumentID = null)
+    {
+        if (!empty($markup)) {
+            $this->load($markup, $contentType, $newDocumentID);
+        }
+        $this->id = !empty($newDocumentID) ? $newDocumentID : md5(microtime());
+    }
+
+    /**
+     * Load by Markup
+     *
+     * @param string|DOMDocument $markup
+     * @param null|string        $contentType
+     * @param null|string        $newDocumentID
+     * @return bool
+     * @throws Exception
+     */
+    public function load($markup, $contentType = null, $newDocumentID = null)
+    {
+        $this->contentType = strtolower($contentType);
+        if ($markup instanceof DOMDocument) {
+            $this->document = $markup;
+            $this->root = $this->document;
+            $this->charset = $this->document->encoding;
+            // TODO: isDocumentFragment
+            $loaded = true;
+        }
+        else {
+            $loaded = $this->loadMarkup($markup);
+        }
+        if ($loaded) {
+            //$this->document->formatOutput = true;
+            $this->document->preserveWhiteSpace = true;
+            $this->xpath = new DOMXPath($this->document);
+            $this->afterMarkupLoad();
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * After Markup loaded
+     *
+     * @return void
+     */
+    protected function afterMarkupLoad()
+    {
+        if ($this->isXHTML) {
+            $this->xpath->registerNamespace("html", "http://www.w3.org/1999/xhtml");
+        }
+    }
+
+    /**
+     * Handler load Markup
+     *
+     * @param string $markup
+     * @return bool
+     * @throws Exception
+     */
+    protected function loadMarkup($markup)
+    {
+        $loaded = false;
+        if ($this->contentType) {
+            $this->debug("Load markup for content type {$this->contentType}");
+
+            // content determined by contentType
+            list($contentType, $charset) = $this->contentTypeToArray($this->contentType);
+            switch ($contentType) {
+                case 'text/html':
+                    $this->debug("Loading HTML, content type '{$this->contentType}'");
+                    $loaded = $this->loadMarkupHTML($markup, $charset);
+                    break;
+                case 'text/xml':
+                case 'application/xhtml+xml':
+                    $this->debug("Loading XML, content type '{$this->contentType}'");
+                    $loaded = $this->loadMarkupXML($markup, $charset);
+                    break;
+                default:
+                    // for feeds or anything that sometimes doesn't use text/xml
+                    if (strpos('xml', $this->contentType) !== false) {
+                        $this->debug("Loading XML, content type '{$this->contentType}'");
+                        $loaded = $this->loadMarkupXML($markup, $charset);
+                    }
+                    else {
+                        $this->debug("Could not determine document type from content type '{$this->contentType}'");
+                    }
+            }
+        }
+        else {
+            // content type autodetect
+            if ($this->isXML($markup)) {
+                $this->debug("Loading XML, isXML() == true");
+                $loaded = $this->loadMarkupXML($markup);
+                if (!$loaded && $this->isXHTML) {
+                    $this->debug('Loading as XML failed, trying to load as HTML, isXHTML == true');
+                    $loaded = $this->loadMarkupHTML($markup);
+                }
+            }
+            else {
+                $this->debug("Loading HTML, isXML() == false");
+                $loaded = $this->loadMarkupHTML($markup);
+            }
+        }
+        return (bool)$loaded;
+    }
+
+    /**
+     * Load Markup reset
+     *
+     * @return void
+     */
+    protected function loadMarkupReset()
+    {
+        $this->isXML = $this->isXHTML = $this->isHTML = false;
+    }
+
+    /**
+     * Handler create new Document
+     *
+     * @param string $charset
+     * @param string $version
+     * @return void
+     */
+    protected function documentCreate($charset, $version = '1.0')
+    {
+        if (empty($version)) {
+            $version = '1.0';
+        }
+
+        $this->document = new DOMDocument($version, $charset);
+        $this->charset = $this->document->encoding;
+        //$this->document->encoding = $charset;
+        $this->document->formatOutput = true;
+        $this->document->preserveWhiteSpace = true;
+    }
+
+    /**
+     * Handler load Markup HTML
+     *
+     * @param string      $markup
+     * @param null|string $requestedCharset
+     * @return bool
+     */
+    protected function loadMarkupHTML($markup, $requestedCharset = null)
+    {
+        $this->debug('Full markup load (HTML): '.substr($markup, 0, 250));
+
+        $this->loadMarkupReset();
+        $this->isHTML = true;
+        if (!isset($this->isDocumentFragment)) {
+            $this->isDocumentFragment = self::isDocumentFragmentHTML($markup);
+        }
+
+        $charset = '';
+        $documentCharset = $this->charsetFromHTML($markup);
+        $addDocumentCharset = false;
+        if (!empty($documentCharset)) {
+            $charset = $documentCharset;
+            $markup = $this->charsetFixHTML($markup);
+        }
+        elseif (!empty($requestedCharset)) {
+            $charset = $requestedCharset;
+        }
+
+        if (empty($charset)) {
+            $charset = $this->getDefaultCharset();
+        }
+
+        // HTTP 1.1 says that the default charset is ISO-8859-1
+        // @see http://www.w3.org/International/O-HTTP-charset
+        if (empty($documentCharset)) {
+            $documentCharset = 'ISO-8859-1';
+            $addDocumentCharset = true;
+        }
+
+        // Should be careful here, still need 'magic encoding detection' since lots of pages have other 'default encoding'
+        // Worse, some pages can have mixed encodings... we'll try not to worry about that
+        $requestedCharset = strtoupper($requestedCharset);
+        $documentCharset = strtoupper($documentCharset);
+        $this->debug("DOC: $documentCharset REQ: $requestedCharset");
+        if (!empty($requestedCharset) && !empty($documentCharset) && $requestedCharset !== $documentCharset) {
+            $this->debug("CHARSET CONVERT");
+
+            // Document Encoding Conversion
+            // http://code.google.com/p/phpquery/issues/detail?id=86
+            if (function_exists('mb_detect_encoding')) {
+                $possibleCharsets = [$documentCharset, $requestedCharset, 'AUTO'];
+                $docEncoding = mb_detect_encoding($markup, implode(', ', $possibleCharsets));
+                if (!$docEncoding) {
+                    // ok trust the document
+                    $docEncoding = $documentCharset;
+                }
+
+                $this->debug("DETECTED '$docEncoding'");
+                // Detected does not match what document says...
+                //if ($docEncoding !== $documentCharset) {
+                //    // TODO: Tricky..
+                //}
+
+                if ($docEncoding !== $requestedCharset) {
+                    $this->debug("CONVERT $docEncoding => $requestedCharset");
+                    $markup = mb_convert_encoding($markup, $requestedCharset, $docEncoding);
+                    $markup = $this->charsetAppendToHTML($markup, $requestedCharset);
+                    $charset = $requestedCharset;
+                }
+            }
+            else {
+                $this->debug("TODO: charset conversion without mbstring...");
+            }
+        }
+
+        $return = false;
+        if ($this->isDocumentFragment) {
+            $this->debug("Full markup load (HTML), DocumentFragment detected, using charset '$charset'");
+            $return = $this->documentFragmentLoadMarkup($this, $charset, $markup);
+        }
+        else {
+            if ($addDocumentCharset) {
+                $this->debug("Full markup load (HTML), appending charset: '$charset'");
+                $markup = $this->charsetAppendToHTML($markup, $charset);
+            }
+
+            $this->debug("Full markup load (HTML), documentCreate('$charset')");
+            $this->documentCreate($charset);
+
+            $return = $this->getDebug() === 2
+                ? $this->document->loadHTML($markup)
+                : @$this->document->loadHTML($markup);
+
+            if ($return) {
+                $this->root = $this->document;
+            }
+        }
+
+        if ($return && !$this->contentType) {
+            $this->contentType = 'text/html';
+        }
+
+        return (bool)$return;
+    }
+
+    /**
+     * Handler load Markup XML
+     *
+     * @param string      $markup
+     * @param null|string $requestedCharset
+     * @return bool
+     * @throws Exception
+     */
+    protected function loadMarkupXML($markup, $requestedCharset = null)
+    {
+        $this->debug('Full markup load (XML): '.substr($markup, 0, 250));
+
+        $this->loadMarkupReset();
+        $this->isXML = true;
+
+        // check against XHTML in contentType or markup
+        $isContentTypeXHTML = $this->isXHTML();
+        $isMarkupXHTML = $this->isXHTML($markup);
+        if ($isContentTypeXHTML || $isMarkupXHTML) {
+            $this->debug('Full markup load (XML), XHTML detected');
+            $this->isXHTML = true;
+        }
+
+        // determine document fragment
+        if (!isset($this->isDocumentFragment)) {
+            $this->isDocumentFragment = $this->isXHTML
+                ? self::isDocumentFragmentXHTML($markup)
+                : self::isDocumentFragmentXML($markup);
+        }
+
+        // this charset will be used
+        $charset = '';
+
+        // charset from XML declaration @var string
+        $documentCharset = $this->charsetFromXML($markup);
+        if (!$documentCharset) {
+            if ($this->isXHTML) {
+                // this is XHTML, try to get charset from content-type meta header
+                $documentCharset = $this->charsetFromHTML($markup);
+                if ($documentCharset) {
+                    $this->debug("Full markup load (XML), appending XHTML charset '$documentCharset'");
+                    $markup = $this->charsetAppendToXML($markup, $documentCharset);
+                    $charset = $documentCharset;
+                }
+            }
+            if (empty($documentCharset) && !empty($requestedCharset)) {
+                // if still no document charset...
+                $charset = $requestedCharset;
+            }
+        }
+        elseif (!empty($requestedCharset)) {
+            $charset = $requestedCharset;
+        }
+
+        if (!empty($requestedCharset) && !empty($documentCharset) && $requestedCharset != $documentCharset) {
+            // Place for charset conversion
+            $charset = $requestedCharset;
+        }
+
+        if (empty($charset)) {
+            $charset = $this->getDefaultCharset();
+        }
+
+        $return = false;
+        if ($this->isDocumentFragment) {
+            $this->debug("Full markup load (XML), DocumentFragment detected, using charset '$charset'");
+            $return = $this->documentFragmentLoadMarkup($this, $charset, $markup);
+        }
+        else {
+            // FIXME ???
+            if ($isContentTypeXHTML && !$isMarkupXHTML) {
+                if (!$documentCharset) {
+                    $this->debug("Full markup load (XML), appending charset '$charset'");
+                    $markup = $this->charsetAppendToXML($markup, $charset);
+                }
+            }
+
+            // see http://pl2.php.net/manual/en/book.dom.php#78929
+            // LIBXML_DTDLOAD (>= PHP 5.1)
+            // does XML ctalogues works with LIBXML_NONET
+            //$this->document->resolveExternals = true;
+            // TODO test LIBXML_COMPACT for performance improvement
+
+            // create document
+            $this->documentCreate($charset);
+            if (phpversion() < 5.1) {
+                $this->document->resolveExternals = true;
+                $return = $this->getDebug() === 2
+                    ? $this->document->loadXML($markup)
+                    : @$this->document->loadXML($markup);
+            }
+            else {
+                /** @link http://pl2.php.net/manual/en/libxml.constants.php */
+                $libxmlStatic = $this->getDebug() === 2
+                    ? LIBXML_DTDLOAD | LIBXML_DTDATTR | LIBXML_NONET
+                    : LIBXML_DTDLOAD | LIBXML_DTDATTR | LIBXML_NONET | LIBXML_NOWARNING | LIBXML_NOERROR;
+                $return = $this->document->loadXML($markup, $libxmlStatic);
+                //if (!$return) {
+                //    $return = $this->document->loadHTML($markup);
+                //}
+            }
+            if ($return) {
+                $this->root = $this->document;
+            }
+        }
+
+        if ($return) {
+            if (!$this->contentType) {
+                if ($this->isXHTML) {
+                    $this->contentType = 'application/xhtml+xml';
+                }
+                else {
+                    $this->contentType = 'text/xml';
+                }
+            }
+
+            return (bool)$return;
+        }
+        else {
+            throw new Exception("Error loading XML markup");
+        }
+    }
+
+    /**
+     * Check is XHTML
+     *
+     * @param null|string $markup
+     * @return bool
+     */
+    protected function isXHTML($markup = null)
+    {
+        if (!isset($markup)) {
+            return strpos($this->contentType, 'xhtml') !== false;
+        }
+        // XXX ok ?
+        return strpos($markup, "<!DOCTYPE html") !== false;
+        //return stripos($doctype, 'xhtml') !== false;
+        //$doctype = isset($dom->doctype) && is_object($dom->doctype)
+        //    ? $dom->doctype->publicId
+        //    : $this->getDefaultDoctype();
+    }
+
+    /**
+     * Check Markup is XML
+     *
+     * @param string $markup
+     * @return bool
+     */
+    protected function isXML($markup)
+    {
+        //return strpos($markup, '<?xml') !== false && stripos($markup, 'xhtml') === false;
+        return strpos(substr($markup, 0, 100), '<'.'?xml') !== false;
+    }
+
+    /**
+     * Convert ContentType to Array
+     *
+     * @param string $contentType
+     * @return array [$contentType, $charset]
+     */
+    protected function contentTypeToArray($contentType)
+    {
+        $matches = explode(';', trim(strtolower($contentType)));
+        if (isset($matches[1])) {
+            $matches[1] = explode('=', $matches[1]);
+            // strip 'charset='
+            $matches[1] = isset($matches[1][1]) && trim($matches[1][1])
+                ? $matches[1][1]
+                : $matches[1][0];
+        }
+        else {
+            $matches[1] = '';
+        }
+
+        list($contentType, $charset) = [$matches[0], $matches[1]];
+        return [$contentType, $charset];
+    }
+
+    /**
+     * Get ContentType from HTML
+     *
+     * @param string $markup HTML content
+     * @return array [$contentType, $charset]
+     */
+    protected function contentTypeFromHTML($markup)
+    {
+        $matches = [];
+        // find meta tag
+        preg_match('@<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i', $markup, $matches);
+        if (!isset($matches[0])) {
+            return ['', ''];
+        }
+
+        // get attr 'content'
+        preg_match('@content\\s*=\\s*(["|\'])(.+?)\\1@', $matches[0], $matches);
+        if (!isset($matches[0])) {
+            return ['', ''];
+        }
+
+        list($contentType, $charset) = $this->contentTypeToArray($matches[2]);
+        if (empty($contentType)) {
+            $contentType = '';
+        }
+        if (empty($charset)) {
+            $charset = '';
+        }
+
+        return [$contentType, $charset];
+    }
+
+    /**
+     * Get Charset from HTML
+     *
+     * @param string $markup HTML content
+     * @return string
+     */
+    protected function charsetFromHTML($markup)
+    {
+        list($contentType, $charset) = $this->contentTypeFromHTML($markup);
+
+        return !empty($charset) ? (string)$charset : '';
+    }
+
+    /**
+     * Get Charset from XML
+     *
+     * @param string $markup HTML content
+     * @return string
+     */
+    protected function charsetFromXML($markup)
+    {
+        $matches = [];
+        // find declaration
+        preg_match('@<'.'?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', $markup, $matches);
+
+        return isset($matches[2])
+            ? strtolower($matches[2])
+            : '';
+    }
+
+    /**
+     * Fix Charset in HTML
+     * Repositions meta[type=charset] at the start of head. Bypasses DOMDocument bug.
+     *
+     * @link http://code.google.com/p/phpquery/issues/detail?id=80
+     * @param string $markup HTML content
+     * @return string markup
+     */
+    protected function charsetFixHTML($markup)
+    {
+        $matches = [];
+        // find meta tag
+        preg_match('@\s*<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i', $markup, $matches, PREG_OFFSET_CAPTURE);
+        if (!isset($matches[0])) {
+            return $markup;
+        }
+
+        $metaContentType = $matches[0][0];
+        $markup = substr($markup, 0, $matches[0][1]).substr($markup, $matches[0][1] + strlen($metaContentType));
+        $headStart = stripos($markup, '<head>');
+        return substr($markup, 0, $headStart + 6).$metaContentType.substr($markup, $headStart + 6);
+    }
+
+    /**
+     * Append Charset To HTML
+     *
+     * @param string $html
+     * @param string $charset
+     * @param bool   $xhtml
+     * @return string
+     */
+    protected function charsetAppendToHTML($html, $charset, $xhtml = false)
+    {
+        $return = $html;
+        // remove existing meta[type=content-type]
+        $html = preg_replace('@\s*<meta[^>]+http-equiv\\s*=\\s*(["|\'])Content-Type\\1([^>]+?)>@i', '', $html);
+        $meta = '<meta http-equiv="Content-Type" content="text/html;charset='.$charset.'" '.($xhtml ? '/' : '').'>';
+        if (strpos($html, '<head') === false) {
+            if (strpos($html, '<html') === false) {
+                $return = $meta.$html;
+            }
+            else {
+                $return = preg_replace('@<html(.*?)(?(?<!\?)>)@s', "<html\\1><head>{$meta}</head>", $html);
+            }
+        }
+        else {
+            $return = preg_replace('@<head(.*?)(?(?<!\?)>)@s', '<head\\1>'.$meta, $html);
+        }
+
+        return !empty($return) ? $return : $html;
+    }
+
+    /**
+     * Append Charset To XML
+     *
+     * @param string $markup
+     * @param string $charset
+     * @return string
+     */
+    protected function charsetAppendToXML($markup, $charset)
+    {
+        $declaration = '<'.'?xml version="1.0" encoding="'.$charset.'"?'.'>';
+        return $declaration.$markup;
+    }
+
+    /**
+     * Check is Document Fragment HTML
+     *
+     * @param string $markup
+     * @return bool
+     */
+    public static function isDocumentFragmentHTML($markup)
+    {
+        return stripos($markup, '<html') === false && stripos($markup, '<!doctype') === false;
+    }
+
+    /**
+     * Check is Document Fragment XML
+     *
+     * @param string $markup
+     * @return bool
+     */
+    public static function isDocumentFragmentXML($markup)
+    {
+        return stripos($markup, '<'.'?xml') === false;
+    }
+
+    /**
+     * Check is Document Fragment XHTML
+     *
+     * @param string $markup
+     * @return bool
+     */
+    public static function isDocumentFragmentXHTML($markup)
+    {
+        return self::isDocumentFragmentHTML($markup);
+    }
+
+    /**
+     * Import Source
+     *
+     * @param string|array|DOMNode|DOMNodeList $source
+     * @param null|string                      $sourceCharset
+     * @return array Array of imported nodes.
+     * @throws Exception
+     */
+    public function import($source, $sourceCharset = null)
+    {
+        // TODO: charset conversions
+        $return = [];
+        if ($source instanceof DOMNode && !($source instanceof DOMNodeList)) {
+            $source = [$source];
+        }
+
+        //if (is_array($source)) {
+        //    foreach ($source as $node) {
+        //        if (is_string($node)) {
+        //            // string markup
+        //            $fake = $this->documentFragmentCreate($node, $sourceCharset);
+        //            if ($fake === false) {
+        //                throw new Exception("Error loading documentFragment markup");
+        //            }
+        //            else {
+        //                $return = array_merge($return,$this->import($fake->root->childNodes));
+        //            }
+        //        }
+        //        else {
+        //            $return[] = $this->document->importNode($node, true);
+        //        }
+        //    }
+        //    return $return;
+        //}
+        if (is_array($source) || $source instanceof DOMNodeList) {
+            // dom nodes
+            $this->debug('Importing nodes to document');
+            foreach ($source as $node) {
+                $return[] = $this->document->importNode($node, true);
+            }
+        }
+        else {
+            // string markup
+            $fake = $this->documentFragmentCreate($source, $sourceCharset);
+            if ($fake === false) {
+                throw new Exception("Error loading documentFragment markup");
+            }
+            else {
+                return $this->import($fake->root->childNodes);
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * Creates new document fragment.
+     *
+     * @param string|array|DOMNode|DOMNodeList $source
+     * @param null|string                      $charset
+     * @return false|DOMDocumentWrapper
+     * @throws Exception
+     */
+    protected function documentFragmentCreate($source, $charset = null)
+    {
+        $fake = new DOMDocumentWrapper();
+        $fake->contentType = $this->contentType;
+        $fake->isXML = $this->isXML;
+        $fake->isHTML = $this->isHTML;
+        $fake->isXHTML = $this->isXHTML;
+        $fake->root = $fake->document;
+
+        if (!$charset) {
+            $charset = $this->charset;
+        }
+        //$fake->documentCreate($this->charset);
+
+        if ($source instanceof DOMNode && !($source instanceof DOMNodeList)) {
+            $source = [$source];
+        }
+
+        if (is_array($source) || $source instanceof DOMNodeList) {
+            // dom nodes
+            // load fake document
+            if (!$this->documentFragmentLoadMarkup($fake, $charset)) {
+                return false;
+            }
+
+            $nodes = $fake->import($source);
+            foreach ($nodes as $node) {
+                $fake->root->appendChild($node);
+            }
+        }
+        else {
+            // string markup
+            $this->documentFragmentLoadMarkup($fake, $charset, $source);
+        }
+
+        return $fake;
+    }
+
+    /**
+     * Document Fragment load Markup
+     *
+     * @param DOMDocumentWrapper $fragment
+     * @param string             $charset
+     * @param null|string        $markup
+     * @return bool
+     * @throws Exception
+     */
+    private function documentFragmentLoadMarkup($fragment, $charset, $markup = null)
+    {
+        // TODO: error handling
+        // TODO: copy doctype
+
+        // temporary turn off
+        $fragment->isDocumentFragment = false;
+        if ($fragment->isXML) {
+            if ($fragment->isXHTML) {
+                // add FAKE element to set default namespace
+                $fragment->loadMarkupXML('<?xml version="1.0" encoding="'.$charset.'"?>'
+                    .'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
+                    .'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+                    .'<fake xmlns="http://www.w3.org/1999/xhtml">'.$markup.'</fake>');
+                $fragment->root = $fragment->document->firstChild->nextSibling;
+            }
+            else {
+                $fragment->loadMarkupXML('<?xml version="1.0" encoding="'.$charset.'"?><fake>'.$markup.'</fake>');
+                $fragment->root = $fragment->document->firstChild;
+            }
+        }
+        else {
+            $markup2 = $this->getDefaultDoctype().'<html lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset='.$charset.'"><title>Hello World!</title></head>';
+            $noBody = strpos($markup, '<body') === false;
+
+            if ($noBody) {
+                $markup2 .= '<body>';
+            }
+            $markup2 .= $markup;
+            if ($noBody) {
+                $markup2 .= '</body>';
+            }
+
+            $markup2 .= '</html>';
+            $fragment->loadMarkupHTML($markup2);
+
+            // TODO: resolve body tag merging issue
+            //$fragment->root = $noBody
+            //    ? $fragment->document->firstChild->nextSibling->firstChild->nextSibling
+            //    : $fragment->document->firstChild->nextSibling->firstChild->nextSibling;
+            $fragment->root = $fragment->document->firstChild->nextSibling->firstChild->nextSibling;
+        }
+        if (!$fragment->root) {
+            return false;
+        }
+
+        $fragment->isDocumentFragment = true;
+        return true;
+    }
+
+    /**
+     * Convert Document Fragment to Markup
+     *
+     * @param DOMDocumentWrapper $fragment
+     * @return string
+     */
+    protected function documentFragmentToMarkup($fragment)
+    {
+        $this->debug('documentFragmentToMarkup');
+
+        $tmp = $fragment->isDocumentFragment;
+        $fragment->isDocumentFragment = false;
+        $markup = $fragment->markup();
+        if ($fragment->isXML) {
+            $markup = substr($markup, 0, strrpos($markup, '</fake>'));
+            if ($fragment->isXHTML) {
+                $markup = substr($markup, strpos($markup, '<fake') + 43);
+            }
+            else {
+                $markup = substr($markup, strpos($markup, '<fake>') + 6);
+            }
+        }
+        else {
+            $markup = substr($markup, strpos($markup, '<body>') + 6);
+            $markup = substr($markup, 0, strrpos($markup, '</body>'));
+        }
+        $fragment->isDocumentFragment = $tmp;
+        $this->debug('documentFragmentToMarkup: '.substr($markup, 0, 150));
+
+        return $markup;
+    }
+
+    /**
+     * Return document markup, starting with optional $nodes as root.
+     *
+     * @param array|DOMNode|DOMNodeList $nodes
+     * @return string
+     */
+    public function markup($nodes = null, $innerMarkup = false)
+    {
+        if (isset($nodes) && count($nodes) == 1 && $nodes[0] instanceof DOMDocument) {
+            $nodes = null;
+        }
+
+        if (isset($nodes)) {
+            $markup = '';
+            if (!is_array($nodes) && !($nodes instanceof DOMNodeList)) {
+                $nodes = [$nodes];
+            }
+            if ($this->isDocumentFragment && !$innerMarkup) {
+                foreach ($nodes as $i => $node) {
+                    if ($node->isSameNode($this->root)) {
+                        $nodes = array_slice($nodes, 0, $i)
+                            + phpQuery::DOMNodeListToArray($node->childNodes)
+                            + array_slice($nodes, $i + 1);
+                    }
+                }
+            }
+
+            if ($this->isXML && !$innerMarkup) {
+                $this->debug("Getting outerXML with charset '{$this->charset}'");
+                // we need outerXML, so we can benefit from
+                // $node param support in saveXML()
+                foreach ($nodes as $node) {
+                    $markup .= $this->document->saveXML($node);
+                }
+            }
+            else {
+                $loop = [];
+                if ($innerMarkup) {
+                    foreach ($nodes as $node) {
+                        if ($node->childNodes) {
+                            foreach ($node->childNodes as $child) {
+                                $loop[] = $child;
+                            }
+                        }
+                        else {
+                            $loop[] = $node;
+                        }
+                    }
+                }
+                else {
+                    $loop = $nodes;
+                }
+
+                $this->debug("Getting markup, moving selected nodes (".count($loop).") to new DocumentFragment");
+                $fake = $this->documentFragmentCreate($loop);
+                $markup = $this->documentFragmentToMarkup($fake);
+            }
+
+            if ($this->isXHTML) {
+                $this->debug("Fixing XHTML");
+                $markup = self::markupFixXHTML($markup);
+            }
+
+            $this->debug("Markup: ".substr($markup, 0, 250));
+            return $markup;
+        }
+        else {
+            if ($this->isDocumentFragment) {
+                // documentFragment, html only...
+                $this->debug("Getting markup, DocumentFragment detected");
+                //return $this->markup(
+                //    //$this->document->getElementsByTagName('body')->item(0)
+                //    $this->document->root, true
+                //);
+
+                $markup = $this->documentFragmentToMarkup($this);
+                // no need for markupFixXHTML, as it's done thought markup($nodes) method
+                return $markup;
+            }
+            else {
+                $this->debug("Getting markup (".($this->isXML ? 'XML' : 'HTML')."), final with charset '{$this->charset}'");
+                $markup = $this->isXML
+                    ? $this->document->saveXML()
+                    : $this->document->saveHTML();
+
+                if ($this->isXHTML) {
+                    $this->debug("Fixing XHTML");
+                    $markup = self::markupFixXHTML($markup);
+                }
+
+                $this->debug("Markup: ".substr($markup, 0, 250));
+                return $markup;
+            }
+        }
+    }
+
+    /**
+     * Markup fix XHTML
+     *
+     * @param string $markup
+     * @return string
+     */
+    protected static function markupFixXHTML($markup)
+    {
+        $markup = self::expandEmptyTag('script', $markup);
+        $markup = self::expandEmptyTag('select', $markup);
+        $markup = self::expandEmptyTag('textarea', $markup);
+        return $markup;
+    }
+
+    /**
+     * Expand Empty Tag
+     *
+     * @param string $tag
+     * @param string $xml
+     * @return string
+     * @author mjaque at ilkebenson dot com
+     * @link   http://php.net/manual/en/domdocument.savehtml.php#81256
+     */
+    public static function expandEmptyTag($tag, $xml)
+    {
         $indice = 0;
-        while ($indice< strlen($xml)){
+        while ($indice < strlen($xml)) {
             $pos = strpos($xml, "<$tag ", $indice);
-            if ($pos){
+            if ($pos) {
                 $posCierre = strpos($xml, ">", $pos);
-                if ($xml[$posCierre-1] == "/"){
-                    $xml = substr_replace($xml, "></$tag>", $posCierre-1, 2);
+                if ($xml[$posCierre - 1] == "/") {
+                    $xml = substr_replace($xml, "></$tag>", $posCierre - 1, 2);
                 }
                 $indice = $posCierre;
             }
-            else break;
+            else {
+                break;
+            }
         }
         return $xml;
-	}
+    }
+    
+    /**
+     * Get default Charset
+     *
+     * @return string
+     */
+    protected function getDefaultCharset()
+    {
+        return phpQuery::$defaultCharset;
+    }
+
+    /**
+     * Get default Doctype
+     *
+     * @return string
+     */
+    protected function getDefaultDoctype()
+    {
+        return phpQuery::$defaultDoctype;
+    }
+    
+    /**
+     * Get Debug status
+     * 
+     * @return bool|int
+     */
+    protected function getDebug()
+    {
+        return phpQuery::$debug;
+    }
+    
+    /**
+     * Log Debug
+     *
+     * @param string $text
+     */
+    protected function debug($text)
+    {
+        phpQuery::debug($text);
+    }
 }
 
 /**
