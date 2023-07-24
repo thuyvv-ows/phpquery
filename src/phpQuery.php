@@ -208,7 +208,7 @@ class Callback implements ICallbackNamed
 }
 
 /**
- * Shorthand for new Callback(create_function(...), ...);
+ * Shorthand for new Callback(function(...), ...);
  *
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  */
@@ -228,7 +228,7 @@ class CallbackBody extends Callback implements ICallbackNamed
         $params = func_get_args();
         $params = array_slice($params, 2);
 
-        $this->callback = create_function($paramList, $code);
+        $this->callback = function ($paramList, $code) {};
         $this->params = $params;
     }
 }
@@ -2892,10 +2892,9 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 break;
             case 'parent':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        'return $node instanceof DOMElement && $node->childNodes->length ? $node : null;'
-                    )
+                    function ($node) {
+                        return $node instanceof DOMElement && $node->childNodes->length ? $node : null;
+                    }
                 )->elements;
                 break;
             //case 'parent':
@@ -2909,10 +2908,9 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
             //    break;
             case 'empty':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        'return $node instanceof DOMElement && $node->childNodes->length ? null : $node;'
-                    )
+                    function ($node) {
+                        return $node instanceof DOMElement && $node->childNodes->length ? null : $node;
+                    }
                 )->elements;
                 break;
             case 'disabled':
@@ -2922,24 +2920,21 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 break;
             case 'enabled':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        'return pq($node)->not(":disabled") ? $node : null;'
-                    )
+                    function ($node) {
+                        return pq($node)->not(":disabled") ? $node : null;
+                    }
                 )->elements;
                 break;
             case 'header':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        '$isHeader = isset($node->tagName) && in_array($node->tagName, ["h1", "h2", "h3", "h4", "h5", "h6", "h7"]);
-                        return $isHeader ? $node : null;'
-                    )
+                    function ($node) {
+                        $isHeader = isset($node->tagName) && in_array($node->tagName, ["h1", "h2", "h3", "h4", "h5", "h6", "h7"]);
+                        return $isHeader ? $node : null;
+                    }
                 )->elements;
                 //$this->elements = $this->map(
-                //    create_function(
-                //        '$node', 
-                //        '$node = pq($node);
+                //    function ($node) {
+                //        $node = pq($node);
                 //        return $node->is("h1")
                 //            || $node->is("h2")
                 //            || $node->is("h3")
@@ -2948,32 +2943,29 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 //            || $node->is("h6")
                 //            || $node->is("h7")
                 //            ? $node
-                //            : null;'
-                //    )
+                //            : null;
+                //    }
                 //)->elements;
                 break;
             case 'only-child':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        'return pq($node)->siblings()->size() == 0 ? $node : null;'
-                    )
+                    function ($node) {
+                        return pq($node)->siblings()->size() == 0 ? $node : null;
+                    }
                 )->elements;
                 break;
             case 'first-child':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        'return pq($node)->prevAll()->size() == 0 ? $node : null;'
-                    )
+                    function ($node) {
+                        return pq($node)->prevAll()->size() == 0 ? $node : null;
+                    }
                 )->elements;
                 break;
             case 'last-child':
                 $this->elements = $this->map(
-                    create_function(
-                        '$node',
-                        'return pq($node)->nextAll()->size() == 0 ? $node : null;'
-                    )
+                    function ($node) {
+                        return pq($node)->nextAll()->size() == 0 ? $node : null;
+                    }
                 )->elements;
                 break;
             case 'nth-child':
@@ -2990,19 +2982,18 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 // :nth-child(index/even/odd/equation)
                 if ($param == 'even' || $param == 'odd') {
                     $mapped = $this->map(
-                        create_function(
-                            '$node, $param',
-                            '$index = pq($node)->prevAll()->size()+1;
-                            if ($param == "even" && ($index%2) == 0) {
+                        function ($node) use ($param) {
+                            $index = pq($node)->prevAll()->size() + 1;
+                            if ($param == "even" && ($index % 2) == 0) {
                                 return $node;
                             }
-                            else if ($param == "odd" && $index%2 == 1) {
+                            elseif ($param == "odd" && $index % 2 == 1) {
                                 return $node;
                             }
                             else {
                                 return null;
-                            }'
-                        ),
+                            }
+                        },
                         new CallbackParam(),
                         $param
                     );
@@ -3010,22 +3001,21 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 elseif (mb_strlen($param) > 1 && preg_match('/^(\d*)n([-+]?)(\d*)/', $param) === 1) {
                     // an+b
                     $mapped = $this->map(
-                        create_function(
-                            '$node, $param',
-                            '$prevs = pq($node)->prevAll()->size();
+                        function ($node) use ($param) {
+                            $prevs = pq($node)->prevAll()->size();
                             $index = $prevs + 1;
                             preg_match("/^(\d*)n([-+]?)(\d*)/", $param, $matches);
                             $a = intval($matches[1]);
                             $b = intval($matches[3]);
-                            if($matches[2] === "-") {
+                            if ($matches[2] === "-") {
                                 $b = -$b;
                             }
                             if ($a > 0) {
-                                return ($index-$b)%$a == 0 ? $node : null;
-                                phpQuery::debug($a."*".floor($index/$a)."+$b-1 == ".($a*floor($index/$a)+$b-1)." ?= $prevs");
-                                return $a*floor($index/$a)+$b-1 == $prevs ? $node : null;
+                                return ($index - $b) % $a == 0 ? $node : null;
+                                //phpQuery::debug($a."*".floor($index / $a)."+$b-1 == ".($a * floor($index / $a) + $b - 1)." ?= $prevs");
+                                //return $a * floor($index / $a) + $b - 1 == $prevs ? $node : null;
                             }
-                            else if ($a == 0) {
+                            elseif ($a == 0) {
                                 return $index == $b ? $node : null;
                             }
                             else {
@@ -3038,26 +3028,25 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                             //else {
                             //    return ($index-$b)%$a == 0 ? $node : null;
                             //}
-                            '
-                        ),
+                        },
                         new CallbackParam(), $param
                     );
                 }
                 // index
                 else {
                     $mapped = $this->map(
-                        create_function('$node, $index',
-                            '$prevs = pq($node)->prevAll()->size();
-                            if ($prevs && $prevs == $index-1) {
+                        function ($node, $index) {
+                            $prevs = pq($node)->prevAll()->size();
+                            if ($prevs && $prevs == $index - 1) {
                                 return $node;
                             }
-                            else if (! $prevs && $index == 1) {
+                            elseif (!$prevs && $index == 1) {
                                 return $node;
                             }
                             else {
                                 return null;
-                            }'
-                        ),
+                            }
+                        },
                         new CallbackParam(),
                         $param
                     );
@@ -6224,19 +6213,17 @@ abstract class phpQuery
             while (preg_match($regex, $php)) {
                 $php = preg_replace_callback(
                     $regex,
-                    create_function(
-                        '$matched, $charset = "'.$charset.'"',
-                        'return $matched[1].$matched[2]
-                            .htmlspecialchars("<?"."php".$matched[4]."?".">", ENT_QUOTES|ENT_NOQUOTES, $charset)
-                            .$matched[5].$matched[2];'
-                    ),
+                    function ($matched) use ($charset) {
+                        return $matched[1].$matched[2]
+                            .htmlspecialchars("<?"."php".$matched[4]."?".">", ENT_QUOTES | ENT_NOQUOTES, $charset)
+                            .$matched[5].$matched[2];
+                    },
                     $php
                 );
             }
         }
         $regex = '@(^|>[^<]*)+?(<\?php(.*?)(\?>))@s';
-        $php = preg_replace($regex, '\\1<php><!-- \\3 --></php>', $php);
-        return $php;
+        return preg_replace($regex, '\\1<php><!-- \\3 --></php>', $php);
     }
 
     /**
@@ -6256,10 +6243,9 @@ abstract class phpQuery
         $regex = '@<php>\s*<!--(.*?)-->\s*</php>@s';
         $content = preg_replace_callback(
             $regex,
-            create_function(
-                '$matched',
-                'return "<"."?php ".htmlspecialchars_decode($matched[1])." ?".">";'
-            ),
+            function ($matched) {
+                return "<"."?php ".htmlspecialchars_decode($matched[1])." ?".">";
+            },
             $content
         );
 
@@ -6272,18 +6258,17 @@ abstract class phpQuery
             while (preg_match($regex, $content)) {
                 $content = preg_replace_callback(
                     $regex,
-                    create_function(
-                        '$matched',
-                        'return $matched[1].$matched[2].$matched[3]
-                        ."<?php "
-                        .str_replace(
-                            ["%20", "%3E", "%09", "&#10;", "&#9;", "%7B", "%24", "%7D", "%22", "%5B", "%5D"],
-                            [" ", ">", "    ", "\n", "    ", "{", "$", "}", \'"\', "[", "]"],
-                            htmlspecialchars_decode($matched[4])
-                        )
-                        ." ?>"
-                        .$matched[5].$matched[2];'
-                    ),
+                    function ($matched) {
+                        return $matched[1].$matched[2].$matched[3]
+                            ."<?php "
+                            .str_replace(
+                                ["%20", "%3E", "%09", "&#10;", "&#9;", "%7B", "%24", "%7D", "%22", "%5B", "%5D"],
+                                [" ", ">", "	", "\n", "	", "{", "$", "}", '"', "[", "]"],
+                                htmlspecialchars_decode($matched[4])
+                            )
+                            ." ?>"
+                            .$matched[5].$matched[2];
+                    },
                     $content
                 );
             }
