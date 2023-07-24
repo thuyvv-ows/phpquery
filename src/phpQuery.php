@@ -4531,6 +4531,21 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
     }
 
     /**
+     * Returns textContent for all matched elements, not just the first one.
+     *
+     * @param null|string $text
+     * @return array
+     */
+    public function texts($text = null)
+    {
+        $results = [];
+        foreach ($this->elements as $node) {
+            $results[] = $node->textContent;
+        }
+        return $results;
+    }
+
+    /**
      * Deprecated, use $pq->plugin() instead.
      *
      * @return bool
