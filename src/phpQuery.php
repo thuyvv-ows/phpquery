@@ -5655,7 +5655,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 $node = $node->parentNode;
             }
 
-            $xpath = join('/', array_reverse($xpath));
+            $xpath = implode('/', array_reverse($xpath));
             $return[] = '/'.$xpath;
         }
 
@@ -5687,7 +5687,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                     .($node->getAttribute('id')
                         ? '#'.$node->getAttribute('id') : '')
                     .($node->getAttribute('class')
-                        ? '.'.join('.', preg_split(' ', $node->getAttribute('class'))) : '')
+                        ? '.'.implode('.', explode(' ', $node->getAttribute('class'))) : '')
                     .($node->getAttribute('name')
                         ? '[name="'.$node->getAttribute('name').'"]' : '')
                     .($node->getAttribute('value') && strpos($node->getAttribute('value'), '<'.'?php') === false
