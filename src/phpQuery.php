@@ -2894,7 +2894,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 $this->elements = $this->map(
                     create_function(
                         '$node',
-                        'return $node instanceof DOMELEMENT && $node->childNodes->length ? $node : null;'
+                        'return $node instanceof DOMElement && $node->childNodes->length ? $node : null;'
                     )
                 )->elements;
                 break;
@@ -2911,7 +2911,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 $this->elements = $this->map(
                     create_function(
                         '$node',
-                        'return $node instanceof DOMELEMENT && $node->childNodes->length ? null : $node;'
+                        'return $node instanceof DOMElement && $node->childNodes->length ? null : $node;'
                     )
                 )->elements;
                 break;
@@ -3007,16 +3007,17 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                         $param
                     );
                 }
-                elseif (mb_strlen($param) > 1 && $param{1} == 'n') {
+                elseif (mb_strlen($param) > 1 && preg_match('/^(\d*)n([-+]?)(\d*)/', $param) === 1) {
                     // an+b
                     $mapped = $this->map(
                         create_function(
                             '$node, $param',
                             '$prevs = pq($node)->prevAll()->size();
                             $index = $prevs + 1;
-                            $b = mb_strlen($param) > 3 ? $param{3} : 0;
-                            $a = $param{0};
-                            if ($b && $param{2} == "-") {
+                            preg_match("/^(\d*)n([-+]?)(\d*)/", $param, $matches);
+                            $a = intval($matches[1]);
+                            $b = intval($matches[3]);
+                            if($matches[2] === "-") {
                                 $b = -$b;
                             }
                             if ($a > 0) {
@@ -3060,8 +3061,8 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                         new CallbackParam(),
                         $param
                     );
-                    $this->elements = $mapped->elements;
                 }
+                $this->elements = $mapped->elements;
                 break;
             default:
                 $this->debug("Unknown pseudo-class '{$class}', skipping...");
