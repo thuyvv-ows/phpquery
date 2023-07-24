@@ -3349,7 +3349,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 mb_ereg('^([^ ]+) (.*)$', $url, $matches);
             }
             else {
-                preg_match('^\(\[^ ]+) (.*)$', $url, $matches);
+                preg_match('@^([^ ]+) (.*)$@', $url, $matches);
             }
             $url = $matches[1];
             $selector = $matches[2];
@@ -6669,7 +6669,7 @@ abstract class phpQuery
         }
 
         // JSONP
-        $jsre = "/=\\?(&|$)/";
+        $jsre = "@=\\?(&|$)@";
         if (isset($options['dataType']) && $options['dataType'] == 'jsonp') {
             $jsonpCallbackParam = !empty($options['jsonp']) ? $options['jsonp'] : 'callback';
             if (strtolower($options['type']) == 'get') {
