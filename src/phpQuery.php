@@ -2453,7 +2453,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
         if (mb_strpos($class, '.', 1)) {
             $classes = explode('.', substr($class, 1));
             $classesCount = count($classes);
-            $nodeClasses = explode(' ', $node->getAttribute('class'));
+            $nodeClasses = preg_split("/[\s\t\r\n]+/", $node->getAttribute('class'),-1, PREG_SPLIT_NO_EMPTY);
             $nodeClassesCount = count($nodeClasses);
             if ($classesCount > $nodeClassesCount) {
                 return false;
@@ -2470,7 +2470,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
             // strip leading dot from class name
                 substr($class, 1),
                 // get classes for element as array
-                explode(' ', $node->getAttribute('class'))
+                preg_split("/[\s\t\r\n]+/", $node->getAttribute('class'),-1, PREG_SPLIT_NO_EMPTY)
             );
         }
         return false;
