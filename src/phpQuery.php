@@ -2975,7 +2975,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 }
 
                 // nth-child(n+b) to nth-child(1n+b)
-                if ($param{0} == 'n') {
+                if (substr($param, 0, 1) == 'n') {
                     $param = '1'.$param;
                 }
 
