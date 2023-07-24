@@ -4,20 +4,13 @@
  * Document Object Model (DOM) API based on jQuery JavaScript Library.
  *
  * @version 0.9.5
- * @link http://code.google.com/p/phpquery/
- * @link http://phpquery-library.blogspot.com/
- * @link http://jquery.com/
- * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
+ * @link    http://code.google.com/p/phpquery/
+ * @link    http://phpquery-library.blogspot.com/
+ * @link    http://jquery.com/
+ * @author  Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  * @package phpQuery
  */
-
-// class names for instanceof
-// TODO move them as class constants into phpQuery
-define('DOMDOCUMENT', 'DOMDocument');
-define('DOMELEMENT', 'DOMElement');
-define('DOMNODELIST', 'DOMNodeList');
-define('DOMNODE', 'DOMNode');
 
 // -- Multibyte Compatibility functions ----------------------------------------
 // http://svn.iphonewebdev.com/lace/lib/mb_compat.php
@@ -494,7 +487,7 @@ class DOMDocumentWrapper
 {
     /**
      * DOMDocument class.
-     * 
+     *
      * @var DOMDocument
      */
     public $document;
@@ -508,7 +501,7 @@ class DOMDocumentWrapper
     public $contentType = '';
     /**
      * XPath interface.
-     * 
+     *
      * @var DOMXPath
      */
     public $xpath;
@@ -1460,7 +1453,7 @@ class DOMDocumentWrapper
         }
         return $xml;
     }
-    
+
     /**
      * Get default Charset
      *
@@ -1480,17 +1473,17 @@ class DOMDocumentWrapper
     {
         return phpQuery::$defaultDoctype;
     }
-    
+
     /**
      * Get Debug status
-     * 
+     *
      * @return bool|int
      */
     protected function getDebug()
     {
         return phpQuery::$debug;
     }
-    
+
     /**
      * Log Debug
      *
@@ -1724,9 +1717,9 @@ abstract class phpQueryEvents
 /**
  * Class representing phpQuery objects.
  *
- * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
+ * @author  Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @package phpQuery
- * @method phpQueryObject clone() clone()
+ * @method phpQueryObject clone () clone ()
  * @method phpQueryObject empty() empty()
  * @method phpQueryObject next() next($selector = null)
  * @method phpQueryObject prev() prev($selector = null)
@@ -3547,7 +3540,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
         return phpQuery::pq($wrapper, $this->getDocumentID())
             ->clone()
             ->insertBefore($this->get(0))
-            ->map(array($this, '___wrapAllCallback'))
+            ->map([$this, '___wrapAllCallback'])
             ->append($this);
     }
 
@@ -4310,7 +4303,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
                 }
                 break;
             case 'object':
-                $insertFrom = $insertTo = array();
+                $insertFrom = $insertTo = [];
                 // phpQuery
                 if ($target instanceof self) {
                     if ($to) {
@@ -5432,7 +5425,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
         array_unshift($params, $this->elements);
         return $this->newInstance(
             call_user_func_array(['phpQuery', 'map'], $params)
-            //phpQuery::map($this->elements, $callback);
+        //phpQuery::map($this->elements, $callback);
         );
     }
 
@@ -5853,7 +5846,7 @@ abstract class phpQuery
      */
     public static $debug = false;
     /**
-     * @var array 
+     * @var array
      */
     public static $documents = [];
     /**
@@ -5868,7 +5861,7 @@ abstract class phpQuery
     public static $defaultDoctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
     //public static $defaultDoctype = 'html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"';
     /**
-     * @var string 
+     * @var string
      */
     public static $defaultCharset = 'UTF-8';
     /**
@@ -6442,7 +6435,7 @@ abstract class phpQuery
         if (empty($file)) {
             $file = $class.'.php';
         }
-        
+
         $realStaticClass = 'phpQueryPlugin_'.$class;
         $realObjectClass = 'phpQueryObjectPlugin_'.$class;
 
@@ -6458,16 +6451,16 @@ abstract class phpQuery
             }
         }
         phpQuery::$pluginsLoaded[] = $class;
-        
+
         // static methods
         if ($staticClassExists) {
             $vars = get_class_vars($realStaticClass);
             $loop = !empty($vars['phpQueryMethods'])
                 ? $vars['phpQueryMethods']
                 : get_class_methods($realStaticClass);
-            
-            $initializeMethod = '__initialize'; 
-            foreach($loop as $method) {
+
+            $initializeMethod = '__initialize';
+            foreach ($loop as $method) {
                 if (
                     $method == $initializeMethod
                     || !is_callable([$realStaticClass, $method])
@@ -6479,7 +6472,7 @@ abstract class phpQuery
                     throw new Exception("Duplicate method '{$method}' from plugin '{$class}' conflicts with same method from plugin '".phpQuery::$pluginsStaticMethods[$method]."'");
                     //return false;
                 }
-                
+
                 phpQuery::$pluginsStaticMethods[$method] = $class;
             }
 
@@ -6487,15 +6480,15 @@ abstract class phpQuery
                 call_user_func_array([$realStaticClass, $initializeMethod], []);
             }
         }
-        
+
         // object methods
         if ($objectClassExists) {
             $vars = get_class_vars($realObjectClass);
             $loop = !empty($vars['phpQueryMethods'])
                 ? $vars['phpQueryMethods']
                 : get_class_methods($realObjectClass);
-            
-            foreach($loop as $method) {
+
+            foreach ($loop as $method) {
                 if (!is_callable([$realObjectClass, $method])) {
                     continue;
                 }
@@ -6508,7 +6501,7 @@ abstract class phpQuery
                 phpQuery::$pluginsMethods[$method] = $class;
             }
         }
-        
+
         return true;
     }
 
@@ -6578,11 +6571,11 @@ abstract class phpQuery
      * Make an AJAX request.
      *
      * @link http://docs.jquery.com/Ajax/jQuery.ajax
-     * @param array $options See: http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings
-     *                       Additional options are:
-     *                       'document' - document for global events, @see phpQuery::getDocumentID()
-     *                       'referer' - implemented
-     *                       'requested_with' - TODO: not implemented (X-Requested-With)
+     * @param array      $options See: http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings
+     *                            Additional options are:
+     *                            'document' - document for global events, @see phpQuery::getDocumentID()
+     *                            'referer' - implemented
+     *                            'requested_with' - TODO: not implemented (X-Requested-With)
      * @param null|mixed $xhr
      * @return Zend_Http_Client ?
      * @throws Exception
@@ -6601,7 +6594,7 @@ abstract class phpQuery
         $documentID = isset($options['document'])
             ? phpQuery::getDocumentID($options['document'])
             : null;
-        
+
         if ($xhr) {
             // reuse existing XHR object, but clean it up
             $client = $xhr;
@@ -6623,7 +6616,7 @@ abstract class phpQuery
                 $client = null;
             }
         }
-        
+
         if (empty($client)) {
             throw new Exception("XHR client not exist");
         }
@@ -6640,12 +6633,12 @@ abstract class phpQuery
                 phpQuery::$ajaxAllowedHosts[$k] = $_SERVER['HTTP_HOST'];
             }
         }
-        
+
         $host = parse_url($options['url'], PHP_URL_HOST);
-        if (! in_array($host, phpQuery::$ajaxAllowedHosts)) {
+        if (!in_array($host, phpQuery::$ajaxAllowedHosts)) {
             throw new Exception("Request not permitted, host '$host' not present in phpQuery::\$ajaxAllowedHosts");
         }
-        
+
         // JSONP
         $jsre = "/=\\?(&|$)/";
         if (isset($options['dataType']) && $options['dataType'] == 'jsonp') {
@@ -6697,11 +6690,11 @@ abstract class phpQuery
 
         $client->setUri($options['url']);
         $client->setMethod(strtoupper($options['type']));
-        
+
         if (isset($options['referer']) && $options['referer']) {
             $client->setHeaders('Referer', $options['referer']);
         }
-        
+
         $client->setHeaders([
             //'content-type'  => $options['contentType'],
             'User-Agent'      => 'Mozilla/5.0 (X11; U; Linux x86; en-US; rv:1.9.0.5) Gecko/2008122010 Firefox/3.0.5',
@@ -6711,7 +6704,7 @@ abstract class phpQuery
             //'Accept'        => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language' => 'en-us,en;q=0.5',
         ]);
-        
+
         if ($options['username']) {
             $client->setAuth($options['username'], (!empty($options['password']) ? $options['password'] : ''));
         }
@@ -6719,8 +6712,8 @@ abstract class phpQuery
         if (isset($options['ifModified']) && $options['ifModified']) {
             $client->setHeaders(
                 "If-Modified-Since",
-                (!empty(phpQuery::$lastModified) 
-                    ? phpQuery::$lastModified : 
+                (!empty(phpQuery::$lastModified)
+                    ? phpQuery::$lastModified :
                     "Thu, 01 Jan 1970 00:00:00 GMT"
                 )
             );
@@ -6750,7 +6743,7 @@ abstract class phpQuery
             $client->setEncType($options['contentType']);
             $client->setParameterPost($options['data']);
         }
-        
+
         if (phpQuery::$active == 0 && $options['global']) {
             phpQueryEvents::trigger($documentID, 'ajaxStart');
         }
@@ -7147,13 +7140,13 @@ abstract class phpQuery
 
     /**
      * Translate all items in an array or object to new array of items.
-     * 
+     *
      * @link https://api.jquery.com/jQuery.map
-     * @param array $array
+     * @param array           $array
      * @param string|callable $callback
-     * @param null|mixed $param1
-     * @param null|mixed $param2
-     * @param null|mixed $param3
+     * @param null|mixed      $param1
+     * @param null|mixed      $param2
+     * @param null|mixed      $param3
      * @return array
      */
     public static function map($array, $callback, $param1 = null, $param2 = null, $param3 = null)
@@ -7164,7 +7157,7 @@ abstract class phpQuery
             $paramStructure = func_get_args();
             $paramStructure = array_slice($paramStructure, 2);
         }
-        
+
         foreach ($array as $v) {
             $vv = phpQuery::callbackRun($callback, [$v], $paramStructure);
             //$callbackArgs = $args;
@@ -7310,7 +7303,7 @@ abstract class phpQuery
     {
         return trim($str);
     }
-    
+
     /* PLUGINS NAMESPACE */
     /**
      * call WebBrowser.browserGet function in WebBrowser Plugin
@@ -7419,7 +7412,7 @@ abstract class phpQuery
 
     /**
      * dataSetupNode function
-     * 
+     *
      * @param DOMNode $node
      * @param string  $documentID
      * @return DOMNode
@@ -7529,7 +7522,7 @@ abstract class phpQuery
 
     /**
      * Log Debug
-     * 
+     *
      * @param mixed $data
      */
     public static function debug($data)
@@ -7570,29 +7563,37 @@ class phpQueryPlugins
 
 /**
  * Shortcut to phpQuery::pq($arg1, $context)
- * Chainable.
  *
- * @see phpQuery::pq()
- * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
- * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
+ * @param string|array|DOMNode|DOMNodeList   $arg1    HTML markup, CSS Selector, DOMNode or array of DOMNodes
+ * @param null|string|phpQueryObject|DOMNode $context DOM ID from $pq->getDocumentID(), phpQuery object (determines also query root) or DOMNode (determines also query root)
+ * @return phpQueryObject
+ * @see     phpQuery::pq()
+ * @author  Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @package phpQuery
  */
-function pq($arg1, $context = null) {
-	$args = func_get_args();
-	return call_user_func_array(
-		array('phpQuery', 'pq'),
-		$args
-	);
+function pq($arg1, $context = null)
+{
+    $args = func_get_args();
+    return call_user_func_array(['phpQuery', 'pq'], $args);
 }
+
 // add plugins dir and Zend framework to include path
-set_include_path(
-	get_include_path()
-		.PATH_SEPARATOR.dirname(__FILE__).'/phpQuery/'
-		.PATH_SEPARATOR.dirname(__FILE__).'/phpQuery/plugins/'
-);
+//set_include_path(
+//    get_include_path()
+//    .PATH_SEPARATOR.dirname(__FILE__).'/phpQuery/'
+//    .PATH_SEPARATOR.dirname(__FILE__).'/phpQuery/plugins/'
+//);
+
 // why ? no __call nor __get for statics in php...
 // XXX __callStatic will be available in PHP 5.3
 phpQuery::$plugins = new phpQueryPlugins();
+
 // include bootstrap file (personal library config)
-if (file_exists(dirname(__FILE__).'/phpQuery/bootstrap.php'))
-	require_once dirname(__FILE__).'/phpQuery/bootstrap.php';
+// This file is executed everytime phpQuery is included.
+if (file_exists(__DIR__.'/bootstrap.php')) {
+    require_once __DIR__.'/bootstrap.php';
+}
+// Probably you want to use one of those functions here:
+//phpQuery::ajaxAllowHost();
+//phpQuery::ajaxAllowURL();
+//phpQuery::plugin();
