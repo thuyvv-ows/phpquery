@@ -771,9 +771,17 @@ class DOMDocumentWrapper
             $this->debug("Full markup load (HTML), documentCreate('$charset')");
             $this->documentCreate($charset);
 
-            $return = $this->getDebug() === 2
-                ? $this->document->loadHTML($markup)
-                : @$this->document->loadHTML($markup);
+            if (phpversion() >= 8.0) {
+                // This is important because of HTML5
+                \libxml_use_internal_errors(true);
+                $return = $this->document->loadHTML($markup);
+                \libxml_use_internal_errors(false);
+            }
+            else {
+                $return = $this->getDebug() === 2
+                    ? $this->document->loadHTML($markup)
+                    : @$this->document->loadHTML($markup);
+            }
 
             if ($return) {
                 $this->root = $this->document;
