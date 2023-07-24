@@ -5049,6 +5049,26 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
     }
 
     /**
+     * Returns attributes for all matched elements, not just the first one.
+     *
+     * @param null|string $attr
+     * @return array
+     */
+    public function attrs($attr = null)
+    {
+        $results = [];
+        foreach ($this->getListDOMElementFromStack() as $node) {
+            $matched = $node->hasAttribute($attr)
+                ? $node->getAttribute($attr)
+                : null;
+            if (!is_null($matched)) {
+                $results[] = $matched;
+            }
+        }
+        return $results;
+    }
+
+    /**
      * Get list Attribute of Node ($node)
      *
      * @param DOMNode $node
