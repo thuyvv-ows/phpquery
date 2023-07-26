@@ -490,7 +490,7 @@ class DOMDocumentWrapper
      *
      * @var DOMDocument
      */
-    public $document;
+    public $document = null;
     /**
      * @var string
      */
@@ -504,7 +504,7 @@ class DOMDocumentWrapper
      *
      * @var DOMXPath
      */
-    public $xpath;
+    public $xpath = null;
     /**
      * @var int
      */
@@ -524,7 +524,7 @@ class DOMDocumentWrapper
      *
      * @var DOMNode
      */
-    public $root;
+    public $root = null;
     /**
      * @var bool
      */
@@ -1727,10 +1727,11 @@ abstract class phpQueryEvents
  *
  * @author  Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  * @package phpQuery
- * @method phpQueryObject clone () clone ()
+ * @method phpQueryObject clone() clone()
  * @method phpQueryObject empty() empty()
  * @method phpQueryObject next() next($selector = null)
  * @method phpQueryObject prev() prev($selector = null)
+ * @method string getAttribute(string $name)
  * @property Int $length
  */
 class phpQueryObject implements Iterator, Countable, ArrayAccess
@@ -1780,10 +1781,10 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
      */
     protected $previous = null;
     /**
-     * DOMNode class.
+     * Document root, by default equals to document itself.
+     *  Used by documentFragments.
      *
      * @var DOMNode
-     * @TODO deprecate
      */
     protected $root = null;
     /**
@@ -1840,7 +1841,6 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
         // TODO: check $this->DOM->documentElement;
         //$this->root = $this->document->documentElement;
         $this->root =& $this->documentWrapper->root;
-        //$this->toRoot();
         $this->nodes = [$this->root];
     }
 
@@ -1892,11 +1892,9 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
      *
      * @param DOMDocument|DOMNode $node
      * @return bool
-     * @TODO documentWrapper
      */
     protected function isRoot($node)
     {
-        //return $node instanceof DOMDocument || $node->tagName == 'html';
         return $node instanceof DOMDocument
             || ($node instanceof DOMElement && $node->tagName == 'html')
             || $this->root->isSameNode($node);
@@ -2462,7 +2460,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
         if (mb_strpos($class, '.', 1)) {
             $classes = explode('.', substr($class, 1));
             $classesCount = count($classes);
-            $nodeClasses = preg_split("/[\s\t\r\n]+/", $node->getAttribute('class'),-1, PREG_SPLIT_NO_EMPTY);
+            $nodeClasses = preg_split("/[\s\t\r\n]+/", $node->getAttribute('class'), -1, PREG_SPLIT_NO_EMPTY);
             $nodeClassesCount = count($nodeClasses);
             if ($classesCount > $nodeClassesCount) {
                 return false;
@@ -2479,7 +2477,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
             // strip leading dot from class name
                 substr($class, 1),
                 // get classes for Node as array
-                preg_split("/[\s\t\r\n]+/", $node->getAttribute('class'),-1, PREG_SPLIT_NO_EMPTY)
+                preg_split("/[\s\t\r\n]+/", $node->getAttribute('class'), -1, PREG_SPLIT_NO_EMPTY)
             );
         }
         return false;
@@ -4687,7 +4685,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess
     }
 
     /**
-     * NewInstance included all nextSibling $selector
+     *NewInstance included all nextSibling $selector
      *
      * @param null|mixed $selector
      * @return phpQueryObject
